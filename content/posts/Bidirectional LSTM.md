@@ -2,6 +2,8 @@
 title: "Bidirectional LSTM"
 date: 2021-03-08T21:24:50+08:00
 draft: false
+Tags: ["Development", "golang"]
+Categories: "ML"
 ---
 
 ## 为什么用双向 LSTM？
