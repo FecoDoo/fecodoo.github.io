@@ -1,0 +1,18 @@
+baseURL: https://fecodoo.ml
+languageCode: en-us
+title: Yao Kai
+paginate: 5
+theme: hyde
+
+Menus:
+  main:
+    - Name: "Github"
+      URL: "https://github.com/fecodoo/"
+    - Name: "LinkedIn"
+      URL: "https://www.linkedin.com/in/fecodoo/"
+      
+params:
+  # description: "If nothing is impossible, one knows no limits.\tIf one knows no limits, one may rule the empire."
+  description: "无不克则莫知其极，莫知其极，可以有国"
+
+  themeColor: "theme-base-08"
