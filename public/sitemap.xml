@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://fecodoo.ml/posts/gradient-decent-update-rule/</loc>
+    <lastmod>2021-03-08T21:32:56+08:00</lastmod>
+  </url><url>
+    <loc>https://fecodoo.ml/posts/</loc>
+    <lastmod>2021-03-08T21:32:56+08:00</lastmod>
+  </url><url>
+    <loc>https://fecodoo.ml/</loc>
+    <lastmod>2021-03-08T21:32:56+08:00</lastmod>
+  </url><url>
+    <loc>https://fecodoo.ml/posts/bidirectional-lstm/</loc>
+    <lastmod>2021-03-08T21:24:50+08:00</lastmod>
+  </url><url>
+    <loc>https://fecodoo.ml/about/</loc>
+  </url><url>
+    <loc>https://fecodoo.ml/archives/</loc>
+  </url><url>
+    <loc>https://fecodoo.ml/categories/</loc>
+  </url><url>
+    <loc>https://fecodoo.ml/tags/</loc>
+  </url>
+</urlset>
