@@ -48,13 +48,13 @@
   }
   
   html {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Noto Sans SC', 'Noto Sans', 'Ubuntu Mono', 'Courier Prime', monospace;
     font-size: 16px;
     line-height: 1.5;
   }
   @media (min-width: 38em) {
     html {
-      font-size: 20px;
+      font-size: 1rem;
     }
   }
   
@@ -148,7 +148,7 @@
   /* Code */
   code,
   pre {
-    font-family: "Roboto", "Ubuntu", Menlo, Monaco, "Courier New", monospace;
+    font-family: 'Ubuntu Mono', monospace;
   }
   code {
     padding: .25em .5em;
@@ -162,8 +162,7 @@
     margin-top: 0;
     margin-bottom: 1rem;
     padding: 1rem;
-    font-size: .5rem;
-    line-height: 1.4;
+    font-size: .6rem;
     white-space: pre;
     white-space: pre-wrap;
     word-break: break-all;
@@ -234,6 +233,7 @@
   
   .lead {
     font-size: 1.25rem;
+    font-family: "ZCOOL XiaoWei", Arial, Helvetica, sans-serif;
     font-weight: 300;
   }
   
@@ -306,6 +306,10 @@
   .post {
     margin-bottom: 4em;
   }
+
+  .post h1 {
+    font-family: "Ubuntu Mono";
+  }
   
   /* Blog post or page title */
   .page-title,
@@ -363,7 +367,7 @@
     overflow: hidden; /* clearfix */
     margin-left: -1rem;
     margin-right: -1rem;
-    font-family: "Narrow", "Roboto", Helvetica, Arial, sans-serif;
+    font-family: 'Ubuntu Mono', monospace;
     color: #ccc;
     text-align: center;
   }
