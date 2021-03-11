@@ -24,11 +24,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Noto+Sans&family=Noto+Sans+SC&family=Ubuntu+Mono&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 
 
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
@@ -63,6 +73,17 @@
     <main class="content container">
     <div class="posts">
 <article class="post">
+  <h1 class="post-title">
+    <a href="https://blog.fecodoo.ml/posts/hofm/">HOFM</a>
+  </h1>
+  <time datetime="2021-03-12T00:40:22&#43;0800" class="post-date">Fri, Mar 12, 2021</time>
+  Abstract According to practical experience and medical treatment records, it shows that combinations of multiple drugs may positively effect the curing process regarding to certain disease. People are investigating about the effectiveness of the drug combinations with certian dosage against senarios when used respectively. However, the number of potencial combinations may grow exponentially when try to add more medicines into consideration, this refers as combinatorial explosion. Hence, we need to prioritize and reduce ranks for the search for combinations, whereas certrain machine learning methods can contribute.
+  
+  <div class="read-more-link">
+    <a href="/posts/hofm/">Read More…</a>
+  </div>
+  
+</article><article class="post">
   <h1 class="post-title">
     <a href="https://blog.fecodoo.ml/posts/gradient-decent-update-rule/">Gradient Decent Update Rule</a>
   </h1>

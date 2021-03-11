@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Yao Kai</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Mar 2021 21:32:56 +0800</lastBuildDate><atom:link href="https://blog.fecodoo.ml/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Mar 2021 00:40:22 +0800</lastBuildDate><atom:link href="https://blog.fecodoo.ml/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HOFM</title>
+      <link>https://blog.fecodoo.ml/posts/hofm/</link>
+      <pubDate>Fri, 12 Mar 2021 00:40:22 +0800</pubDate>
+      
+      <guid>https://blog.fecodoo.ml/posts/hofm/</guid>
+      <description>Abstract According to practical experience and medical treatment records, it shows that combinations of multiple drugs may positively effect the curing process regarding to certain disease. People are investigating about the effectiveness of the drug combinations with certian dosage against senarios when used respectively. However, the number of potencial combinations may grow exponentially when try to add more medicines into consideration, this refers as combinatorial explosion. Hence, we need to prioritize and reduce ranks for the search for combinations, whereas certrain machine learning methods can contribute.</description>
+    </item>
+    
     <item>
       <title>Gradient Decent Update Rule</title>
       <link>https://blog.fecodoo.ml/posts/gradient-decent-update-rule/</link>

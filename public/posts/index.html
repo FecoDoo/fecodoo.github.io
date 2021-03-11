@@ -24,11 +24,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Noto+Sans&family=Noto+Sans+SC&family=Ubuntu+Mono&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 
 
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
 
   
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
@@ -63,6 +73,8 @@
     <main class="content container">
     <ul class="posts">
 <li>
+    <span><a href="https://blog.fecodoo.ml/posts/hofm/">HOFM</a> <time class="pull-right post-list" datetime="2021-03-12T00:40:22&#43;0800">Fri, Mar 12, 2021</time></span>
+  </li><li>
     <span><a href="https://blog.fecodoo.ml/posts/gradient-decent-update-rule/">Gradient Decent Update Rule</a> <time class="pull-right post-list" datetime="2021-03-08T21:32:56&#43;0800">Mon, Mar 8, 2021</time></span>
   </li><li>
     <span><a href="https://blog.fecodoo.ml/posts/bidirectional-lstm/">Bidirectional LSTM</a> <time class="pull-right post-list" datetime="2021-03-08T21:24:50&#43;0800">Mon, Mar 8, 2021</time></span>
