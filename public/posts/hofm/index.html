@@ -71,7 +71,7 @@
   
     <main class="content container">
     <div class="post">
-  <h1>HOFM</h1>
+  <h1 class="post_title">HOFM</h1>
   <time datetime=2021-03-12T00:40:22&#43;0800 class="post-date">Fri, Mar 12, 2021</time>
   <h2 id="abstract">Abstract</h2>
 <p>According to practical experience and medical treatment records, it shows that combinations of multiple drugs may positively effect the curing process regarding to certain disease. People are investigating about the effectiveness of the drug combinations with certian dosage against senarios when used respectively. However, the number of potencial combinations may grow exponentially when try to add more medicines into consideration, this refers as <code>combinatorial explosion</code>. Hence, we need to prioritize and reduce ranks for the search for combinations, whereas certrain machine learning methods can contribute. In this lecture, we focused on <code>ComboFM</code>, which is based on <code>higher-order factorization machines</code>.</p>
@@ -79,8 +79,8 @@
 <p>For a prediction problem where features show dependencies with each other, traditional linear regression techniques are not suitable since it does not take simultaneous interaction into consideration. However, calculating higher order interactions is extremely expensive, as an quadratic  regression prediciton model $f: R^d \rightarrow R$ has $O(d^2)$ parameters to be estimated.</p>
 <h2 id="factorization-machines-fm">Factorization machines (FM)</h2>
 <p>Factorization machines introduces a much more practical approach, where the polynomial regression model is replaced by a factorized form.</p>
-<p>$$ \hat{y}FM(x) = \sum_iw_ix_i + \sum_{i^{'}&gt;i}&lt;p_i,p_{i^{'}}x_ix_{i^{'}} $$</p>
-<p>The interaction weight $w_{ij} \approx &lt;p_j, p_{j^{'}}&gt; = \sum_{S=1}^{k}p_{jS}p_{j^{'}S}$ is represented as a inner product over the factor contributions, which refers as the factorization process.</p>
+<p>$$ \hat{y}FM(x) = \sum_iw_ix_i + \sum_{i^{'}&gt;i}&lt;p_i,p_{i^{'}}&gt;x_ix_{i^{'}} $$</p>
+<p>The interaction weight $w_{ij} \approx &lt;p_j, p_{j^{'}}&gt; = \sum_{S=1}^{k}p_{j S}p_{j^{'} S}$ is represented as a inner product over the factor contributions, which refers as the factorization process.</p>
 <h2 id="higher-order-factorization-machines-hofm">Higher-order factorization machines (HOFM)</h2>
 <p>The <code>HOFM</code> step further in decomposition as it canrepresent polynomial models of arbitrary maximum degree $m$. And the interaction weights are given by generalized inner products.</p>
 <p>$$w_{j_1,j_2,&hellip;,j_m} = &lt;p_{j_1}^m,&hellip;,p_{j_m}^m&gt; = \sum_{S=1}^{k} p_{j_1S^m} &hellip; p_{j_mS^m}$$</p>

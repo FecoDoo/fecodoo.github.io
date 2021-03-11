@@ -15,9 +15,9 @@ For a prediction problem where features show dependencies with each other, tradi
 
 Factorization machines introduces a much more practical approach, where the polynomial regression model is replaced by a factorized form.
 
-$$ \hat{y}FM(x) = \sum_iw_ix_i + \sum_{i^{'}>i}<p_i,p_{i^{'}}x_ix_{i^{'}} $$
+$$ \hat{y}FM(x) = \sum_iw_ix_i + \sum_{i^{'}>i}<p_i,p_{i^{'}}>x_ix_{i^{'}} $$
 
-The interaction weight $w_{ij} \approx <p_j, p_{j^{'}}> = \sum_{S=1}^{k}p_{jS}p_{j^{'}S}$ is represented as a inner product over the factor contributions, which refers as the factorization process.
+The interaction weight $w_{ij} \approx <p_j, p_{j^{'}}> = \sum_{S=1}^{k}p_{j S}p_{j^{'} S}$ is represented as a inner product over the factor contributions, which refers as the factorization process.
 
 ## Higher-order factorization machines (HOFM)
 
