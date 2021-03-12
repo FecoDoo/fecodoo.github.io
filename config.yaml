@@ -1,4 +1,4 @@
-# baseURL: https://blog.fecodoo.ml/
+baseURL: https://fecodoo.github.io
 publishDir: docs/
 languageCode: en-us
 title: Yao Kai
