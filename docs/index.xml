@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title></title>
-    <link>/</link>
-    <description>Recent content on </description>
+    <title>Yao Kai</title>
+    <link>https://blog.fecodoo.ml/</link>
+    <description>Recent content on Yao Kai</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 12 Mar 2021 00:40:22 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Fri, 12 Mar 2021 00:40:22 +0800</lastBuildDate><atom:link href="https://blog.fecodoo.ml/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HOFM</title>
-      <link>/posts/hofm/</link>
+      <link>https://blog.fecodoo.ml/posts/hofm/</link>
       <pubDate>Fri, 12 Mar 2021 00:40:22 +0800</pubDate>
       
-      <guid>/posts/hofm/</guid>
+      <guid>https://blog.fecodoo.ml/posts/hofm/</guid>
       <description>Abstract According to practical experience and medical treatment records, it shows that combinations of multiple drugs may positively effect the curing process regarding to certain disease. People are investigating about the effectiveness of the drug combinations with certian dosage against senarios when used respectively. However, the number of potencial combinations may grow exponentially when try to add more medicines into consideration, this refers as combinatorial explosion. Hence, we need to prioritize and reduce ranks for the search for combinations, whereas certrain machine learning methods can contribute.</description>
     </item>
     
     <item>
       <title>Gradient Decent Update Rule</title>
-      <link>/posts/gradient-decent-update-rule/</link>
+      <link>https://blog.fecodoo.ml/posts/gradient-decent-update-rule/</link>
       <pubDate>Mon, 08 Mar 2021 21:32:56 +0800</pubDate>
       
-      <guid>/posts/gradient-decent-update-rule/</guid>
+      <guid>https://blog.fecodoo.ml/posts/gradient-decent-update-rule/</guid>
       <description>Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
 $$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
  where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
@@ -30,10 +31,10 @@ You need to shift l to l+1 when coding.</description>
     
     <item>
       <title>Bidirectional LSTM</title>
-      <link>/posts/bidirectional-lstm/</link>
+      <link>https://blog.fecodoo.ml/posts/bidirectional-lstm/</link>
       <pubDate>Mon, 08 Mar 2021 21:24:50 +0800</pubDate>
       
-      <guid>/posts/bidirectional-lstm/</guid>
+      <guid>https://blog.fecodoo.ml/posts/bidirectional-lstm/</guid>
       <description>为什么用双向 LSTM？ 单向的 RNN，是根据前面的信息推出后面的，但有时候只看前面的词是不够的， 例如，
 我今天不舒服，我打算____一天。
 只根据‘不舒服‘，可能推出我打算‘去医院‘，‘睡觉‘，‘请假‘等等，但如果加上后面的‘一天‘，能选择的范围就变小了，‘去医院‘这种就不能选了，而‘请假‘‘休息‘之类的被选择概率就会更大。
@@ -51,19 +52,19 @@ You need to shift l to l+1 when coding.</description>
     
     <item>
       <title>About me</title>
-      <link>/about/</link>
+      <link>https://blog.fecodoo.ml/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/about/</guid>
+      <guid>https://blog.fecodoo.ml/about/</guid>
       <description>about</description>
     </item>
     
     <item>
       <title>Archive</title>
-      <link>/archives/</link>
+      <link>https://blog.fecodoo.ml/archives/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/archives/</guid>
+      <guid>https://blog.fecodoo.ml/archives/</guid>
       <description>archives</description>
     </item>
     
