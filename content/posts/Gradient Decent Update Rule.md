@@ -107,11 +107,14 @@ In Stochastic Gradient Descent, you use only 1 training example before updating 
 
 {% asset_img 1550575200308.png %}
 
-- **Partition**: Partition the shuffled (X, Y) into `mini_batch_size`
+- **Partition**: Partition the shuffled $(X, Y)$ into `mini_batch_size`
 
 {% asset_img 1550575213693.png %}
 
-Note that the last mini-batch might end up smaller than `mini_batch_size=64`. Let $$ \lfloor s \rfloor $$ represents $$ s $$ rounded down to the nearest integer (this is `math.floor(s)` in Python). If the total number of examples is not a multiple of `mini_batch_size=64` then there will be $$\lfloor \frac{m}{mini\_batch\_size}\rfloor$$ mini-batches with a full 64 examples, and the number of examples in the final mini-batch will be $$ m-mini\_batch\_size \times \lfloor \frac{m}{mini\_batch\_size}\rfloor $$
+Note that the last mini-batch might end up smaller than `mini_batch_size=64`. Let $ \lfloor s \rfloor $ represents $ s $ rounded down to the nearest integer (this is `math.floor(s)` in Python). If the total number of examples is not a multiple of `mini_batch_size=64` then there will be
+$$\lfloor \frac{m}{mini\\_batch\\_size}\rfloor$$
+mini-batches with a full 64 examples, and the number of examples in the final mini-batch will be
+$$ m - mini\\_batch\\_size \times \lfloor \frac{m}{mini\\_batch\\_size}\rfloor $$
 
 ```python
 num_complete_minibatches = math.floor(m/mini_batch_size) # number of mini batches of size mini_batch_size in your partitionning
@@ -147,17 +150,15 @@ for l in range(L):
 
 - Update
 
-$$
-v_{dW^{[l]}} = \beta v_{dW^{[l]}} + (1 - \beta) dW^{[l]} \\
-W^{[l]} = W^{[l]} - \alpha v_{dW^{[l]}}
-\end{cases}\tag{1}$$
-$$
+$$ v_{dW^{[l]}} = \beta v_{dW^{[l]}} + (1 - \beta) dW^{[l]} $$
+$$W^{[l]} = W^{[l]} - \alpha v_{dW^{[l]}} $$
 
-v\\*{db^{[l]}} = \beta v\\*{db^{[l]}} + (1 - \beta) db^{[l]} \\
-b^{[l]} = b^{[l]} - \alpha v\\\_{db^{[l]}}
-\end{cases}\tag{2}\\\$\$
+---
 
-> where L is the number of layers, $\beta$ is the momentum and $\alpha$ is the learning rate. All parameters should be stored in the `parameters` dictionary. Note that the iterator `l` starts at 0 in the `for` loop while the first parameters are $W^{[1]}$ and $b^{[1]}$ (that's a "one" on the superscript). So you will need to shift `l` to `l+1` when coding.
+$$ v_{db^{[l]}} = \beta v_{db^{[l]}} + (1 - \beta) db^{[l]} $$ 
+$$ b^{[l]} = b^{[l]} - \alpha v_{db^{[l]}} $$
+
+where `l` is the number of layers, $\beta$ is the momentum and $\alpha$ is the learning rate. All parameters should be stored in the `parameters` dictionary. Note that the iterator `l` starts at 0 in the `for` loop while the first parameters are $W^{[1]}$ and $b^{[1]}$ (that's a "one" on the superscript). So you will need to shift `l` to `l+1` when coding.
 
 ```python
 for l in range(L):
@@ -198,8 +199,8 @@ $$ s^{corrected}* {db} = \frac{s\_{db}}{1 - (\beta_2)^t} $$
 
 ---
 
-$$ W = W - \alpha \frac{v^{corrected}_{dW}}{\sqrt{s^{corrected}_{dW} + \varepsilon}} $$
-$$ b = b - \alpha \frac{v^{corrected}_{db}}{\sqrt{s^{corrected}_{db} + \varepsilon}} $$
+$$ W = W - \alpha \frac{v_{dW}^{corrected}}{\sqrt{s_{dW}^{corrected} + \varepsilon}} $$
+$$ b = b - \alpha \frac{v_{db}^{corrected}}{\sqrt{s_{db}^{corrected} + \varepsilon}} $$
 
 ---
 
@@ -233,4 +234,3 @@ for l in range(L):
         parameters["W" + str(l+1)] = parameters["W" + str(l + 1)] - learning_rate * v_corrected["dW" + str(l + 1)] / np.sqrt(s_corrected["dW" + str(l + 1)] + epsilon)
         parameters["b" + str(l+1)] = parameters["b" + str(l + 1)] - learning_rate * v_corrected["db" + str(l + 1)] / np.sqrt(s_corrected["db" + str(l + 1)] + epsilon)
 ```
-$$
