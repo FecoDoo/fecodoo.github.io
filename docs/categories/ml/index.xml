@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>ML on Yao Kai</title>
-    <link>https://blog.fecodoo.ml/categories/ml/</link>
+    <link>/categories/ml/</link>
     <description>Recent content in ML on Yao Kai</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Mar 2021 21:24:50 +0800</lastBuildDate><atom:link href="https://blog.fecodoo.ml/categories/ml/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Mar 2021 21:24:50 +0800</lastBuildDate><atom:link href="/categories/ml/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Bidirectional LSTM</title>
-      <link>https://blog.fecodoo.ml/posts/bidirectional-lstm/</link>
+      <link>/posts/bidirectional-lstm/</link>
       <pubDate>Mon, 08 Mar 2021 21:24:50 +0800</pubDate>
       
-      <guid>https://blog.fecodoo.ml/posts/bidirectional-lstm/</guid>
+      <guid>/posts/bidirectional-lstm/</guid>
       <description>为什么用双向 LSTM？ 单向的 RNN，是根据前面的信息推出后面的，但有时候只看前面的词是不够的， 例如，
 我今天不舒服，我打算____一天。
 只根据‘不舒服‘，可能推出我打算‘去医院‘，‘睡觉‘，‘请假‘等等，但如果加上后面的‘一天‘，能选择的范围就变小了，‘去医院‘这种就不能选了，而‘请假‘‘休息‘之类的被选择概率就会更大。

@@ -2,38 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://blog.fecodoo.ml/posts/hofm/</loc>
+    <loc>/posts/hofm/</loc>
     <lastmod>2021-03-12T00:40:22+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/posts/</loc>
+    <loc>/posts/</loc>
     <lastmod>2021-03-12T00:40:22+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/</loc>
+    <loc>/</loc>
     <lastmod>2021-03-12T00:40:22+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/posts/gradient-decent-update-rule/</loc>
+    <loc>/posts/gradient-decent-update-rule/</loc>
     <lastmod>2021-03-08T21:32:56+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/posts/bidirectional-lstm/</loc>
+    <loc>/posts/bidirectional-lstm/</loc>
     <lastmod>2021-03-08T21:24:50+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/categories/</loc>
+    <loc>/categories/</loc>
     <lastmod>2021-03-08T21:24:50+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/tags/development/</loc>
+    <loc>/tags/development/</loc>
     <lastmod>2021-03-08T21:24:50+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/tags/golang/</loc>
+    <loc>/tags/golang/</loc>
     <lastmod>2021-03-08T21:24:50+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/categories/ml/</loc>
+    <loc>/categories/ml/</loc>
     <lastmod>2021-03-08T21:24:50+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2021-03-08T21:24:50+08:00</lastmod>
   </url><url>
-    <loc>https://blog.fecodoo.ml/about/</loc>
+    <loc>/about/</loc>
   </url><url>
-    <loc>https://blog.fecodoo.ml/archives/</loc>
+    <loc>/archives/</loc>
   </url>
 </urlset>
