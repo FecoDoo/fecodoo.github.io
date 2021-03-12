@@ -1,4 +1,5 @@
 baseURL: https://blog.fecodoo.ml/
+publishURL: docs/
 languageCode: en-us
 title: Yao Kai
 paginate: 5
