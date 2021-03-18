@@ -71,7 +71,7 @@
   
     <main class="content container">
     <div class="post">
-  <h1 class="post_title">Gradient Decent Update Rule</h1>
+  <div class='post-title'>Gradient Decent Update Rule</div>
   <time datetime=2021-03-08T21:32:56&#43;0800 class="post-date">Mon, Mar 8, 2021</time>
   <h3 id="gradient-descent-update-rule">Gradient descent update rule</h3>
 <p>$$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$</p>
@@ -266,7 +266,6 @@ $$ b = b - \alpha \frac{v_{db}^{corrected}}{\sqrt{s_{db}^{corrected} + \varepsil
         parameters[<span style="color:#e6db74">&#34;b&#34;</span> <span style="color:#f92672">+</span> str(l<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)] <span style="color:#f92672">=</span> parameters[<span style="color:#e6db74">&#34;b&#34;</span> <span style="color:#f92672">+</span> str(l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)] <span style="color:#f92672">-</span> learning_rate <span style="color:#f92672">*</span> v_corrected[<span style="color:#e6db74">&#34;db&#34;</span> <span style="color:#f92672">+</span> str(l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)] <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sqrt(s_corrected[<span style="color:#e6db74">&#34;db&#34;</span> <span style="color:#f92672">+</span> str(l <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)] <span style="color:#f92672">+</span> epsilon)
 </code></pre></div>
 </div>
-
 
     </main>
 
