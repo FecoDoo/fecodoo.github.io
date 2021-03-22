@@ -48,7 +48,7 @@
   }
   
   html {
-    font-family: 'Noto Sans SC', 'Noto Sans', 'Ubuntu Mono', 'Courier Prime', monospace;
+    font-family: "Blinker", "Ubuntu Mono", "Courier Prime", monospace, Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
   }
@@ -85,7 +85,7 @@
     color: #313131;
     text-rendering: optimizeLegibility;
     color: #b3555e;
-    font-family: 'Ubuntu Mono';
+    font-family: 'Blinker';
   }
   h1 {
     margin-top: 2rem;
@@ -322,7 +322,7 @@
   .page-title,
   .post-title {
     margin-top: 0;
-    font-family: 'Ubuntu Mono';
+    /* font-family: 'Ubuntu Mono'; */
     font-size: 2rem;
     color: #b3555e;
     font-weight: bold;

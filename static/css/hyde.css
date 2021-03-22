@@ -32,7 +32,7 @@
  */
 
  html {
-    font-family:  "Noto Sans SC", "Noto Sans", "Ubuntu Mono", "Courier Prime", Helvetica, Arial, sans-serif;
+    font-family:  "Blinker", "Ubuntu Mono", "Courier Prime", monospace, Helvetica, Arial, sans-serif;
 
   }
   @media (min-width: 48em) {
@@ -86,7 +86,7 @@
   
   /* Sidebar nav */
   .sidebar-nav {
-    font-family: "Ubuntu Mono";
+    font-family: "Blinker";
     padding-left: 0;
     list-style: none;
   }
@@ -117,7 +117,7 @@
   }
   
   .copyright {
-    font-family: "Courier Prime";
+    font-family: "Blinker";
   }
 
   
