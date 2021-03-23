@@ -1,6 +1,6 @@
 ---
 title: "Gradient Decent Update Rule"
-date: 2021-03-08T21:32:56+08:00
+date: 2020-04-14T21:32:56+08:00
 draft: false
 ---
 

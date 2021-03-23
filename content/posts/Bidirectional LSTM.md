@@ -1,6 +1,6 @@
 ---
 title: "Bidirectional LSTM"
-date: 2021-03-08T21:24:50+08:00
+date: 2020-11-08T21:24:50+08:00
 draft: false
 Tags: ["Development", "golang"]
 Categories: "ML"

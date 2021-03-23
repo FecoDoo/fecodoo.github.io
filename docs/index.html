@@ -94,24 +94,21 @@ With the input out of the LC-MS^2 process, the machine learning algorithm runs l
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://fecodoo.github.io/posts/gradient-decent-update-rule/">Gradient Decent Update Rule</a>
+    <a href="https://fecodoo.github.io/posts/convolutional-neural-network/">Convolutional Neural Network</a>
   </h1>
-  <time datetime="2021-03-08T21:32:56&#43;0800" class="post-date">Mon, Mar 8, 2021</time>
-  Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
-$$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
- where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
-Note that the iterator l starts at 0 in the for loop while the first parameters are W[1] and b[1].
-You need to shift l to l+1 when coding.
+  <time datetime="2021-02-23T22:28:58&#43;0800" class="post-date">Tue, Feb 23, 2021</time>
+  1 Defination of convolution The mathmatical format of convolution is
+ Continuous: $ Conv(x) = \int f(x-\alpha)t(\alpha)d\alpha $ Discreate: $ Conv(x)=\sum_{\alpha} f(x-\alpha)t(\alpha) $ Matrix: $Conv(x) = (f * t)(x)$, where $*$ represents the convolution process  2 Convolution Neural Network 2.1 Convolutional layer Terms  W: width or height of the input matrix (输入的长度或宽度) F: receptive field (感受野) S: stride（步幅） P: zero-padding (补零的数量) K: depth of the output (深度，输出单元的深度)  The output shape of after a convolution process follows: $$\frac{S}{W-F+2P} + 1$$
   
   <div class="read-more-link">
-    <a href="/posts/gradient-decent-update-rule/">Read More…</a>
+    <a href="/posts/convolutional-neural-network/">Read More…</a>
   </div>
   
 </article><article class="post">
   <h1 class="post-title">
     <a href="https://fecodoo.github.io/posts/bidirectional-lstm/">Bidirectional LSTM</a>
   </h1>
-  <time datetime="2021-03-08T21:24:50&#43;0800" class="post-date">Mon, Mar 8, 2021</time>
+  <time datetime="2020-11-08T21:24:50&#43;0800" class="post-date">Sun, Nov 8, 2020</time>
   为什么用双向 LSTM？ 单向的 RNN，是根据前面的信息推出后面的，但有时候只看前面的词是不够的， 例如，
 我今天不舒服，我打算____一天。
 只根据‘不舒服‘，可能推出我打算‘去医院‘，‘睡觉‘，‘请假‘等等，但如果加上后面的‘一天‘，能选择的范围就变小了，‘去医院‘这种就不能选了，而‘请假‘‘休息‘之类的被选择概率就会更大。
@@ -128,6 +125,21 @@ You need to shift l to l+1 when coding.
   
   <div class="read-more-link">
     <a href="/posts/bidirectional-lstm/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://fecodoo.github.io/posts/gradient-decent-update-rule/">Gradient Decent Update Rule</a>
+  </h1>
+  <time datetime="2020-04-14T21:32:56&#43;0800" class="post-date">Tue, Apr 14, 2020</time>
+  Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
+$$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
+ where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
+Note that the iterator l starts at 0 in the for loop while the first parameters are W[1] and b[1].
+You need to shift l to l+1 when coding.
+  
+  <div class="read-more-link">
+    <a href="/posts/gradient-decent-update-rule/">Read More…</a>
   </div>
   
 </article><article class="post">

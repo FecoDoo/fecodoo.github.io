@@ -27,22 +27,19 @@ With the input out of the LC-MS^2 process, the machine learning algorithm runs l
     </item>
     
     <item>
-      <title>Gradient Decent Update Rule</title>
-      <link>https://fecodoo.github.io/posts/gradient-decent-update-rule/</link>
-      <pubDate>Mon, 08 Mar 2021 21:32:56 +0800</pubDate>
+      <title>Convolutional Neural Network</title>
+      <link>https://fecodoo.github.io/posts/convolutional-neural-network/</link>
+      <pubDate>Tue, 23 Feb 2021 22:28:58 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/gradient-decent-update-rule/</guid>
-      <description>Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
-$$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
- where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
-Note that the iterator l starts at 0 in the for loop while the first parameters are W[1] and b[1].
-You need to shift l to l+1 when coding.</description>
+      <guid>https://fecodoo.github.io/posts/convolutional-neural-network/</guid>
+      <description>1 Defination of convolution The mathmatical format of convolution is
+ Continuous: $ Conv(x) = \int f(x-\alpha)t(\alpha)d\alpha $ Discreate: $ Conv(x)=\sum_{\alpha} f(x-\alpha)t(\alpha) $ Matrix: $Conv(x) = (f * t)(x)$, where $*$ represents the convolution process  2 Convolution Neural Network 2.1 Convolutional layer Terms  W: width or height of the input matrix (输入的长度或宽度) F: receptive field (感受野) S: stride（步幅） P: zero-padding (补零的数量) K: depth of the output (深度，输出单元的深度)  The output shape of after a convolution process follows: $$\frac{S}{W-F+2P} + 1$$</description>
     </item>
     
     <item>
       <title>Bidirectional LSTM</title>
       <link>https://fecodoo.github.io/posts/bidirectional-lstm/</link>
-      <pubDate>Mon, 08 Mar 2021 21:24:50 +0800</pubDate>
+      <pubDate>Sun, 08 Nov 2020 21:24:50 +0800</pubDate>
       
       <guid>https://fecodoo.github.io/posts/bidirectional-lstm/</guid>
       <description>为什么用双向 LSTM？ 单向的 RNN，是根据前面的信息推出后面的，但有时候只看前面的词是不够的， 例如，
@@ -58,6 +55,19 @@ You need to shift l to l+1 when coding.</description>
  该方法以及被应用于 LSTM 循环神经网络。向前和向后提供整个序列是基于假设整个序列是可用的假设的。在使用矢量化输入时，在这个实践中通常是一个要求。然而，它可能会引起哲学上的关注，其中理想的时间步长是按顺序和及时（just-in-time）提供的。在语音识别领域中，双向地提供输入序列是合理的，因为有证据表明，在人类中，整个话语的上下文被用来解释所说的话而不是一个线性解释。
  &amp;hellip;依赖于乍一看是违反因果关系的未来知识。我们如何才能理解我们所听到的关于海没有说过的话呢？然而，人类的厅总就是这样做的。在未来的语境中，声音、词语乃至于整个句子都是毫无意义的。我们必须记住的是，任务之间的区别是真的在线的——在每个输入之后需要一个输出，以及在某些输入段的末尾只需要输出。
 — Framewise Phoneme Classiﬁcation with Bidirectional LSTM and Other Neural Network Architectures, 2005.</description>
+    </item>
+    
+    <item>
+      <title>Gradient Decent Update Rule</title>
+      <link>https://fecodoo.github.io/posts/gradient-decent-update-rule/</link>
+      <pubDate>Tue, 14 Apr 2020 21:32:56 +0800</pubDate>
+      
+      <guid>https://fecodoo.github.io/posts/gradient-decent-update-rule/</guid>
+      <description>Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
+$$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
+ where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
+Note that the iterator l starts at 0 in the for loop while the first parameters are W[1] and b[1].
+You need to shift l to l+1 when coding.</description>
     </item>
     
     <item>
