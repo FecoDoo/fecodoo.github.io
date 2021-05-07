@@ -16,7 +16,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tags &middot; Yao Kai</title>
+  <title>Eigenvectors and Matrix Decomposition &middot; Yao Kai</title>
   <meta name="description" content="" />
 
   
@@ -47,7 +47,6 @@
   <link rel="shortcut icon" href="/favicon.ico">
 
   
-  <link href="https://fecodoo.github.io/tags/index.xml" rel="alternate" type="application/rss+xml" title="Yao Kai" />
   
 </head>
 
@@ -73,13 +72,33 @@
   </aside>
   
     <main class="content container">
-    <ul class="posts">
-<li>
-    <span><a href="https://fecodoo.github.io/tags/development/">Development</a> <time class="pull-right post-list" datetime="2020-11-08T21:24:50&#43;0800">Sun, Nov 8, 2020</time></span>
-  </li><li>
-    <span><a href="https://fecodoo.github.io/tags/golang/">golang</a> <time class="pull-right post-list" datetime="2020-11-08T21:24:50&#43;0800">Sun, Nov 8, 2020</time></span>
-  </li>
+    <div class="post">
+  <div class='post-title'>Eigenvectors and Matrix Decomposition</div>
+  <time datetime=2018-06-16T16:41:57&#43;0800 class="post-date">Sat, Jun 16, 2018</time>
+  <h1 id="basic-concepts">Basic concepts</h1>
+<h2 id="linear-transformation">Linear Transformation</h2>
+<p>A matrix can be seen as a linear transforamtion, for which the most important factors are the speed and direction:</p>
+<ul>
+<li>Eigenvalue is the velocity</li>
+<li>Eigenvector is the direction</li>
 </ul>
+<h2 id="rank">Rank</h2>
+<p>The rank of the matrix represents the dimension. It also indicates the number of the eigenvectors (linear independent base vectors) of the transformation.</p>
+<hr>
+<h1 id="eigenvectors-and-eigenvalue">Eigenvectors and Eigenvalue</h1>
+<p>Matrix $A$ is a linear transformation, and it can be represents as follows:</p>
+<p>$$Au = \lambda u$$</p>
+<p>$u$ is one of the eigenvectors of matrix $A$. The equation shows that the linear transformation of $A$ only scales the eigenvector $u$ by $\lambda$ times.</p>
+<p>Eigenvectors can be seen as base vectors in a coordinate system during the linear transformation. The linear transformation equals to a scaling operation on the direction of eigenvectors where the scaling factors are eigenvalues.</p>
+<hr>
+<h1 id="feature-decomposition">Feature Decomposition</h1>
+<p>If a $n\times n$ matrix $A$ has $n$ eigenvectors (the rank of $A$ equals to $n$), then matrix $A$ are decomposable.
+$$A = Q^{-1}\Lambda Q$$
+$Q$ is a square matrix of $n$ eigenvectors, where the $i^{th}$ column is the eigenvector $e_i$.
+$\Lambda$ is a diagonal matrix where values on the diagonal are eigenvales (scaling values).</p>
+
+</div>
+
     </main>
 
     

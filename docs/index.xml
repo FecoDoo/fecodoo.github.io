@@ -71,6 +71,17 @@ You need to shift l to l+1 when coding.</description>
     </item>
     
     <item>
+      <title>Eigenvectors and Matrix Decomposition</title>
+      <link>https://fecodoo.github.io/posts/eigenvectors-and-matrix-decomposition/</link>
+      <pubDate>Sat, 16 Jun 2018 16:41:57 +0800</pubDate>
+      
+      <guid>https://fecodoo.github.io/posts/eigenvectors-and-matrix-decomposition/</guid>
+      <description>Basic concepts Linear Transformation A matrix can be seen as a linear transforamtion, for which the most important factors are the speed and direction:
+ Eigenvalue is the velocity Eigenvector is the direction  Rank The rank of the matrix represents the dimension. It also indicates the number of the eigenvectors (linear independent base vectors) of the transformation.
+ Eigenvectors and Eigenvalue Matrix $A$ is a linear transformation, and it can be represents as follows:</description>
+    </item>
+    
+    <item>
       <title>About me</title>
       <link>https://fecodoo.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -86,6 +97,16 @@ You need to shift l to l+1 when coding.</description>
       
       <guid>https://fecodoo.github.io/archives/</guid>
       <description>archives</description>
+    </item>
+    
+    <item>
+      <title>PageRank&amp;SimRank</title>
+      <link>https://fecodoo.github.io/posts/pageranksimrank/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://fecodoo.github.io/posts/pageranksimrank/</guid>
+      <description>Random Walk Given a graph, a random walk is an iterative process that starts from a random vertex, and at each step, either follows a random outgoing edge of the current vertex or jumps to a random vertex. The jump part is important because some vertices may not have any outgoing edges so a walk will terminate at those places without jumping to another vertex.
+Page Rank (PR) measures stationary distribution of one specific kind of random walk that starts from a random vertex and in each iteration, with a predefined probability p, jumps to a random vertex, and with probability1-p follows a random outgoing edge of the current vertex.</description>
     </item>
     
   </channel>
