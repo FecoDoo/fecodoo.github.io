@@ -6,7 +6,36 @@
     <description>Recent content in Posts on Yao Kai</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Mar 2021 19:10:53 +0800</lastBuildDate><atom:link href="https://fecodoo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 09 Jun 2021 00:40:44 +0800</lastBuildDate><atom:link href="https://fecodoo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Diffie Hellman &amp; Elliptic Curve</title>
+      <link>https://fecodoo.github.io/posts/diffie-hellman-elliptic-curve/</link>
+      <pubDate>Wed, 09 Jun 2021 00:40:44 +0800</pubDate>
+      
+      <guid>https://fecodoo.github.io/posts/diffie-hellman-elliptic-curve/</guid>
+      <description>Diffie-Hellman is commutative, this arithmetic nature denotes that it&amp;rsquo;s easy to do the exponential calculation in one direction but rather computationally expensive in reverse.</description>
+    </item>
+    
+    <item>
+      <title>IPsec Configuration With Strongswan &amp; Iptables</title>
+      <link>https://fecodoo.github.io/posts/ipsec-configuration-with-strongswan-iptables/</link>
+      <pubDate>Thu, 27 May 2021 20:47:19 +0800</pubDate>
+      
+      <guid>https://fecodoo.github.io/posts/ipsec-configuration-with-strongswan-iptables/</guid>
+      <description>Network Overview Assume that we have a typical testbed looks like this:
+The testbed is initially configured so that the clients (IoT devices) in each customer’s network access a local server. Your goal is to relocate the server functionality from the customers’ local networks to a cloud platform, which is represented by the network on the right-hand side. The Router in the above topology represents routing across the Internet between the customer sites and the cloud.</description>
+    </item>
+    
+    <item>
+      <title>IPsec Protocol</title>
+      <link>https://fecodoo.github.io/posts/ipsec-protocol/</link>
+      <pubDate>Mon, 05 Apr 2021 21:52:10 +0800</pubDate>
+      
+      <guid>https://fecodoo.github.io/posts/ipsec-protocol/</guid>
+      <description>IPsec Protocol consists of three parts:
+ Authentication Header Encapsulating Security Payload IKE (Internet Key Extrange)  </description>
+    </item>
+    
     <item>
       <title>Machine Learning With LCMS</title>
       <link>https://fecodoo.github.io/posts/machine-learning-for-small-molecule-identification/</link>

@@ -200,7 +200,7 @@ $$ m - mini\_batch\_size \times \lfloor \frac{m}{mini\_batch\_size}\rfloor $$</p
 <p>$$ v_{dW^{[l]}} = \beta v_{dW^{[l]}} + (1 - \beta) dW^{[l]} $$
 $$W^{[l]} = W^{[l]} - \alpha v_{dW^{[l]}} $$</p>
 <hr>
-<p>$$ v_{db^{[l]}} = \beta v_{db^{[l]}} + (1 - \beta) db^{[l]} $$ 
+<p>$$ v_{db^{[l]}} = \beta v_{db^{[l]}} + (1 - \beta) db^{[l]} $$
 $$ b^{[l]} = b^{[l]} - \alpha v_{db^{[l]}} $$</p>
 <p>where <code>l</code> is the number of layers, $\beta$ is the momentum and $\alpha$ is the learning rate. All parameters should be stored in the <code>parameters</code> dictionary. Note that the iterator <code>l</code> starts at 0 in the <code>for</code> loop while the first parameters are $W^{[1]}$ and $b^{[1]}$ (that&rsquo;s a &ldquo;one&rdquo; on the superscript). So you will need to shift <code>l</code> to <code>l+1</code> when coding.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> l <span style="color:#f92672">in</span> range(L):
