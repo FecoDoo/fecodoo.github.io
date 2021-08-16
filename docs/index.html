@@ -6,6 +6,11 @@
 <head>
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="nofollow" />
+  <meta name="description" content="Yao Kai" />
+  <meta name="aplus-xplug" content="NONE">
+  <meta name="keyword" content="fecodoo,yao kai"/>
+
   <meta name="generator" content="Hugo 0.81.0" />
 
   
@@ -20,11 +25,8 @@
   <link type="text/css" rel="stylesheet" href="https://fecodoo.github.io/css/syntax.css">
   <link type="text/css" rel="stylesheet" href="https://fecodoo.github.io/css/hyde.css">
   
-
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Noto+Sans&family=Noto+Sans+SC&family=Ubuntu+Mono&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
-
-
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Blinker:wght@300&family=Ubuntu+Mono&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 
 <script>
   MathJax = {
@@ -74,30 +76,15 @@
     <div class="posts">
 <article class="post">
   <h1 class="post-title">
-    <a href="https://fecodoo.github.io/posts/diffie-hellman-elliptic-curve/">Diffie Hellman &amp; Elliptic Curve</a>
+    <a href="https://fecodoo.github.io/posts/machine-learning-for-small-molecule-identification/">Machine Learning With LCMS</a>
   </h1>
-  <time datetime="2021-06-09T00:40:44&#43;0800" class="post-date">Wed, Jun 9, 2021</time>
-  Diffie-Hellman is commutative, this arithmetic nature denotes that it&rsquo;s easy to do the exponential calculation in one direction but rather computationally expensive in reverse.
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://fecodoo.github.io/posts/ipsec-configuration-with-strongswan-iptables/">IPsec Configuration With Strongswan &amp; Iptables</a>
-  </h1>
-  <time datetime="2021-05-27T20:47:19&#43;0800" class="post-date">Thu, May 27, 2021</time>
-  Network Overview Assume that we have a typical testbed looks like this:
-The testbed is initially configured so that the clients (IoT devices) in each customer’s network access a local server. Your goal is to relocate the server functionality from the customers’ local networks to a cloud platform, which is represented by the network on the right-hand side. The Router in the above topology represents routing across the Internet between the customer sites and the cloud.
+  <time datetime="2021-03-18T19:10:53&#43;0800" class="post-date">Thu, Mar 18, 2021</time>
+  Learning Diary 2 1 Abstract In metabolite analysis, we are trying to study and annotate different molecules by their features. However, small molecules typically contain similar structures and the space of potential structures is tremendous (over 600 million). The amount of unique spectra covers only a small fraction of the entire database.
+With the input out of the LC-MS^2 process, the machine learning algorithm runs like a search engine that assigns ranked scores to predicted structures of high similarities.
   
   <div class="read-more-link">
-    <a href="/posts/ipsec-configuration-with-strongswan-iptables/">Read More…</a>
+    <a href="/posts/machine-learning-for-small-molecule-identification/">Read More…</a>
   </div>
-  
-</article><article class="post">
-  <h1 class="post-title">
-    <a href="https://fecodoo.github.io/posts/ipsec-protocol/">IPsec Protocol</a>
-  </h1>
-  <time datetime="2021-04-05T21:52:10&#43;0800" class="post-date">Mon, Apr 5, 2021</time>
-  IPsec Protocol consists of three parts:
- Authentication Header Encapsulating Security Payload IKE (Internet Key Extrange)  
   
 </article><article class="post">
   <h1 class="post-title">
@@ -112,24 +99,21 @@ The testbed is initially configured so that the clients (IoT devices) in each cu
   
 </article><article class="post">
   <h1 class="post-title">
-    <a href="https://fecodoo.github.io/posts/gradient-decent-update-rule/">Gradient Decent Update Rule</a>
+    <a href="https://fecodoo.github.io/posts/convolutional-neural-network/">Convolutional Neural Network</a>
   </h1>
-  <time datetime="2021-03-08T21:32:56&#43;0800" class="post-date">Mon, Mar 8, 2021</time>
-  Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
-$$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
- where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
-Note that the iterator l starts at 0 in the for loop while the first parameters are W[1] and b[1].
-You need to shift l to l+1 when coding.
+  <time datetime="2021-02-23T22:28:58&#43;0800" class="post-date">Tue, Feb 23, 2021</time>
+  1 Defination of convolution The mathmatical format of convolution is
+ Continuous: $ Conv(x) = \int f(x-\alpha)t(\alpha)d\alpha $ Discreate: $ Conv(x)=\sum_{\alpha} f(x-\alpha)t(\alpha) $ Matrix: $Conv(x) = (f * t)(x)$, where $*$ represents the convolution process  2 Convolution Neural Network 2.1 Convolutional layer Terms  W: width or height of the input matrix (输入的长度或宽度) F: receptive field (感受野) S: stride（步幅） P: zero-padding (补零的数量) K: depth of the output (深度，输出单元的深度)  The output shape of after a convolution process follows: $$\frac{S}{W-F+2P} + 1$$
   
   <div class="read-more-link">
-    <a href="/posts/gradient-decent-update-rule/">Read More…</a>
+    <a href="/posts/convolutional-neural-network/">Read More…</a>
   </div>
   
 </article><article class="post">
   <h1 class="post-title">
     <a href="https://fecodoo.github.io/posts/bidirectional-lstm/">Bidirectional LSTM</a>
   </h1>
-  <time datetime="2021-03-08T21:24:50&#43;0800" class="post-date">Mon, Mar 8, 2021</time>
+  <time datetime="2020-11-08T21:24:50&#43;0800" class="post-date">Sun, Nov 8, 2020</time>
   为什么用双向 LSTM？ 单向的 RNN，是根据前面的信息推出后面的，但有时候只看前面的词是不够的， 例如，
 我今天不舒服，我打算____一天。
 只根据‘不舒服‘，可能推出我打算‘去医院‘，‘睡觉‘，‘请假‘等等，但如果加上后面的‘一天‘，能选择的范围就变小了，‘去医院‘这种就不能选了，而‘请假‘‘休息‘之类的被选择概率就会更大。
@@ -150,6 +134,34 @@ You need to shift l to l+1 when coding.
   
 </article><article class="post">
   <h1 class="post-title">
+    <a href="https://fecodoo.github.io/posts/gradient-decent-update-rule/">Gradient Decent Update Rule</a>
+  </h1>
+  <time datetime="2020-04-14T21:32:56&#43;0800" class="post-date">Tue, Apr 14, 2020</time>
+  Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
+$$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
+ where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
+Note that the iterator l starts at 0 in the for loop while the first parameters are W[1] and b[1].
+You need to shift l to l+1 when coding.
+  
+  <div class="read-more-link">
+    <a href="/posts/gradient-decent-update-rule/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://fecodoo.github.io/posts/eigenvectors-and-matrix-decomposition/">Eigenvectors and Matrix Decomposition</a>
+  </h1>
+  <time datetime="2018-06-16T16:41:57&#43;0800" class="post-date">Sat, Jun 16, 2018</time>
+  Basic concepts Linear Transformation A matrix can be seen as a linear transforamtion, for which the most important factors are the speed and direction:
+ Eigenvalue is the velocity Eigenvector is the direction  Rank The rank of the matrix represents the dimension. It also indicates the number of the eigenvectors (linear independent base vectors) of the transformation.
+ Eigenvectors and Eigenvalue Matrix $A$ is a linear transformation, and it can be represents as follows:
+  
+  <div class="read-more-link">
+    <a href="/posts/eigenvectors-and-matrix-decomposition/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
     <a href="https://fecodoo.github.io/about/">About me</a>
   </h1>
   <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
@@ -161,6 +173,18 @@ You need to shift l to l+1 when coding.
   </h1>
   <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
   archives
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://fecodoo.github.io/posts/pageranksimrank/">PageRank&amp;SimRank</a>
+  </h1>
+  <time datetime="0001-01-01T00:00:00Z" class="post-date">Mon, Jan 1, 0001</time>
+  Random Walk Given a graph, a random walk is an iterative process that starts from a random vertex, and at each step, either follows a random outgoing edge of the current vertex or jumps to a random vertex. The jump part is important because some vertices may not have any outgoing edges so a walk will terminate at those places without jumping to another vertex.
+Page Rank (PR) measures stationary distribution of one specific kind of random walk that starts from a random vertex and in each iteration, with a predefined probability p, jumps to a random vertex, and with probability1-p follows a random outgoing edge of the current vertex.
+  
+  <div class="read-more-link">
+    <a href="/posts/pageranksimrank/">Read More…</a>
+  </div>
   
 </article>
 </div>
