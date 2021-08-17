@@ -2,65 +2,65 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Yao Kai</title>
-    <link>https://fecodoo.github.io/</link>
+    <link>https://blog.fecodoo.ml/</link>
     <description>Recent content on Yao Kai</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Jun 2021 00:40:44 +0800</lastBuildDate><atom:link href="https://fecodoo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 09 Jun 2021 00:40:44 +0800</lastBuildDate><atom:link href="https://blog.fecodoo.ml/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Diffie Hellman &amp; Elliptic Curve</title>
-      <link>https://fecodoo.github.io/posts/diffie-hellman-elliptic-curve/</link>
+      <link>https://blog.fecodoo.ml/posts/diffie-hellman-elliptic-curve/</link>
       <pubDate>Wed, 09 Jun 2021 00:40:44 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/diffie-hellman-elliptic-curve/</guid>
+      <guid>https://blog.fecodoo.ml/posts/diffie-hellman-elliptic-curve/</guid>
       <description>Diffie-Hellman is commutative, this arithmetic nature denotes that it&amp;rsquo;s easy to do the exponential calculation in one direction but rather computationally expensive in reverse.</description>
     </item>
     
     <item>
       <title>IPsec Configuration With Strongswan &amp; Iptables</title>
-      <link>https://fecodoo.github.io/posts/ipsec-configuration-with-strongswan-iptables/</link>
+      <link>https://blog.fecodoo.ml/posts/ipsec-configuration-with-strongswan-iptables/</link>
       <pubDate>Thu, 27 May 2021 20:47:19 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/ipsec-configuration-with-strongswan-iptables/</guid>
+      <guid>https://blog.fecodoo.ml/posts/ipsec-configuration-with-strongswan-iptables/</guid>
       <description>Network Overview Assume that we have a typical testbed looks like this:
 The testbed is initially configured so that the clients (IoT devices) in each customer’s network access a local server. Your goal is to relocate the server functionality from the customers’ local networks to a cloud platform, which is represented by the network on the right-hand side. The Router in the above topology represents routing across the Internet between the customer sites and the cloud.</description>
     </item>
     
     <item>
       <title>IPsec Protocol</title>
-      <link>https://fecodoo.github.io/posts/ipsec-protocol/</link>
+      <link>https://blog.fecodoo.ml/posts/ipsec-protocol/</link>
       <pubDate>Mon, 05 Apr 2021 21:52:10 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/ipsec-protocol/</guid>
+      <guid>https://blog.fecodoo.ml/posts/ipsec-protocol/</guid>
       <description>IPsec Protocol consists of three parts:
  Authentication Header Encapsulating Security Payload IKE (Internet Key Extrange)  </description>
     </item>
     
     <item>
       <title>Machine Learning With LCMS</title>
-      <link>https://fecodoo.github.io/posts/machine-learning-for-small-molecule-identification/</link>
+      <link>https://blog.fecodoo.ml/posts/machine-learning-for-small-molecule-identification/</link>
       <pubDate>Thu, 18 Mar 2021 19:10:53 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/machine-learning-for-small-molecule-identification/</guid>
+      <guid>https://blog.fecodoo.ml/posts/machine-learning-for-small-molecule-identification/</guid>
       <description>Learning Diary 2 1 Abstract In metabolite analysis, we are trying to study and annotate different molecules by their features. However, small molecules typically contain similar structures and the space of potential structures is tremendous (over 600 million). The amount of unique spectra covers only a small fraction of the entire database.
 With the input out of the LC-MS^2 process, the machine learning algorithm runs like a search engine that assigns ranked scores to predicted structures of high similarities.</description>
     </item>
     
     <item>
       <title>HOFM</title>
-      <link>https://fecodoo.github.io/posts/hofm/</link>
+      <link>https://blog.fecodoo.ml/posts/hofm/</link>
       <pubDate>Fri, 12 Mar 2021 00:40:22 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/hofm/</guid>
+      <guid>https://blog.fecodoo.ml/posts/hofm/</guid>
       <description>Abstract According to practical experience and medical treatment records, it shows that combinations of multiple drugs may positively effect the curing process regarding to certain disease. People are investigating about the effectiveness of the drug combinations with certian dosage against senarios when used respectively. However, the number of potencial combinations may grow exponentially when try to add more medicines into consideration, this refers as combinatorial explosion. Hence, we need to prioritize and reduce ranks for the search for combinations, whereas certrain machine learning methods can contribute.</description>
     </item>
     
     <item>
       <title>Bidirectional LSTM</title>
-      <link>https://fecodoo.github.io/posts/bidirectional-lstm/</link>
+      <link>https://blog.fecodoo.ml/posts/bidirectional-lstm/</link>
       <pubDate>Sun, 08 Nov 2020 21:24:50 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/bidirectional-lstm/</guid>
+      <guid>https://blog.fecodoo.ml/posts/bidirectional-lstm/</guid>
       <description>为什么用双向 LSTM？ 单向的 RNN，是根据前面的信息推出后面的，但有时候只看前面的词是不够的， 例如，
 我今天不舒服，我打算____一天。
 只根据‘不舒服‘，可能推出我打算‘去医院‘，‘睡觉‘，‘请假‘等等，但如果加上后面的‘一天‘，能选择的范围就变小了，‘去医院‘这种就不能选了，而‘请假‘‘休息‘之类的被选择概率就会更大。
@@ -78,20 +78,20 @@ With the input out of the LC-MS^2 process, the machine learning algorithm runs l
     
     <item>
       <title>Convolutional Neural Network</title>
-      <link>https://fecodoo.github.io/posts/convolutional-neural-network/</link>
+      <link>https://blog.fecodoo.ml/posts/convolutional-neural-network/</link>
       <pubDate>Fri, 23 Oct 2020 22:28:58 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/convolutional-neural-network/</guid>
+      <guid>https://blog.fecodoo.ml/posts/convolutional-neural-network/</guid>
       <description>1 Defination of convolution The mathmatical format of convolution is
  Continuous: $ Conv(x) = \int f(x-\alpha)t(\alpha)d\alpha $ Discreate: $ Conv(x)=\sum_{\alpha} f(x-\alpha)t(\alpha) $ Matrix: $Conv(x) = (f * t)(x)$, where $*$ represents the convolution process  2 Convolution Neural Network 2.1 Convolutional layer Terms  W: width or height of the input matrix (输入的长度或宽度) F: receptive field (感受野) S: stride（步幅） P: zero-padding (补零的数量) K: depth of the output (深度，输出单元的深度)  The output shape of after a convolution process follows: $$\frac{S}{W-F+2P} + 1$$</description>
     </item>
     
     <item>
       <title>Gradient Decent Update Rule</title>
-      <link>https://fecodoo.github.io/posts/gradient-decent-update-rule/</link>
+      <link>https://blog.fecodoo.ml/posts/gradient-decent-update-rule/</link>
       <pubDate>Tue, 14 Apr 2020 21:32:56 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/gradient-decent-update-rule/</guid>
+      <guid>https://blog.fecodoo.ml/posts/gradient-decent-update-rule/</guid>
       <description>Gradient descent update rule $$ W^{[l]} = W^{[l]} - \alpha \text{ } dW^{[l]}\tag{1} $$
 $$ b^{[l]} = b^{[l]} - \alpha \text{ } db^{[l]}\tag{2} $$
  where L is the number of layers and αα is the learning rate. All parameters should be stored in the parameters dictionary.
@@ -101,20 +101,20 @@ You need to shift l to l+1 when coding.</description>
     
     <item>
       <title>PageRank&amp;SimRank</title>
-      <link>https://fecodoo.github.io/posts/pageranksimrank/</link>
+      <link>https://blog.fecodoo.ml/posts/pageranksimrank/</link>
       <pubDate>Mon, 13 Jan 2020 22:31:23 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/pageranksimrank/</guid>
+      <guid>https://blog.fecodoo.ml/posts/pageranksimrank/</guid>
       <description>Random Walk Given a graph, a random walk is an iterative process that starts from a random vertex, and at each step, either follows a random outgoing edge of the current vertex or jumps to a random vertex. The jump part is important because some vertices may not have any outgoing edges so a walk will terminate at those places without jumping to another vertex.
 Page Rank (PR) measures stationary distribution of one specific kind of random walk that starts from a random vertex and in each iteration, with a predefined probability p, jumps to a random vertex, and with probability1-p follows a random outgoing edge of the current vertex.</description>
     </item>
     
     <item>
       <title>Eigenvectors and Matrix Decomposition</title>
-      <link>https://fecodoo.github.io/posts/eigenvectors-and-matrix-decomposition/</link>
+      <link>https://blog.fecodoo.ml/posts/eigenvectors-and-matrix-decomposition/</link>
       <pubDate>Sat, 16 Jun 2018 16:41:57 +0800</pubDate>
       
-      <guid>https://fecodoo.github.io/posts/eigenvectors-and-matrix-decomposition/</guid>
+      <guid>https://blog.fecodoo.ml/posts/eigenvectors-and-matrix-decomposition/</guid>
       <description>Basic concepts Linear Transformation A matrix can be seen as a linear transforamtion, for which the most important factors are the speed and direction:
  Eigenvalue is the velocity Eigenvector is the direction  Rank The rank of the matrix represents the dimension. It also indicates the number of the eigenvectors (linear independent base vectors) of the transformation.
  Eigenvectors and Eigenvalue Matrix $A$ is a linear transformation, and it can be represents as follows:</description>
@@ -122,19 +122,19 @@ Page Rank (PR) measures stationary distribution of one specific kind of random w
     
     <item>
       <title>About me</title>
-      <link>https://fecodoo.github.io/about/</link>
+      <link>https://blog.fecodoo.ml/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://fecodoo.github.io/about/</guid>
+      <guid>https://blog.fecodoo.ml/about/</guid>
       <description>about</description>
     </item>
     
     <item>
       <title>Archive</title>
-      <link>https://fecodoo.github.io/archives/</link>
+      <link>https://blog.fecodoo.ml/archives/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://fecodoo.github.io/archives/</guid>
+      <guid>https://blog.fecodoo.ml/archives/</guid>
       <description>archives</description>
     </item>
     
