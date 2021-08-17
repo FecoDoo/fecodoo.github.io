@@ -1,6 +1,6 @@
 ---
 title: "Convolutional Neural Network"
-date: 2021-02-23T22:28:58+08:00
+date: 2020-10-23T22:28:58+08:00
 draft: false
 ---
 

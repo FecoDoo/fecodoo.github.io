@@ -91,7 +91,7 @@
 <p><img src="/images/ipsec/network.jpg" alt="network"></p>
 <hr>
 <h2 id="how-do-ipsec-and-iptables-work">How do ipsec and iptables work?</h2>
-<p>A typical workflow of iptables is as follows:
+<p>A typical workflow of iptables is as follows: 
 <img src="/images/ipsec/netfilter.png" alt="netfilter"></p>
 <p>All packages arriving inbound at the router will go through the <code>PREROUTING</code> table first, there the router will check the package&rsquo;s destination inside the header and decide where the package will go next.</p>
 <p>After <code>PREROUTING</code>, the <code>xfrm</code> state check whether the package is a ipsec encapsulation or not. If there&rsquo;s a match, the corresponding package will go up into the decipher process. After being deciphered, the package will return to the <code>PREROUTING</code> for another check.</p>
