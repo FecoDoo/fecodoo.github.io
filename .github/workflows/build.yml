@@ -3,7 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - master  # Set a branch to deploy
 
 jobs:
   Pages:
@@ -30,7 +30,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          enable_jekyll: false
+          github_token: ${{ secrets.ACTION }}
           publish_branch: live
           publish_dir: ./public
           cname: blog.fecodoo.com
