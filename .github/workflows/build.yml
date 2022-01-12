@@ -32,6 +32,6 @@ jobs:
         with:
           enable_jekyll: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /
+          publish_dir: ./public
           publish_branch: live
           cname: blog.fecodoo.ml
