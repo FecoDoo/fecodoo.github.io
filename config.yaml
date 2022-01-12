@@ -1,7 +1,7 @@
 baseURL: https://blog.fecodoo.ml/
 publishDir: public/
 languageCode: en-us
-title: Yao Kai
+title: fecodoo
 paginate: 5
 theme: hyde
 
