@@ -32,17 +32,17 @@
  */
 
  html {
-    font-family:  "Blinker", "Ubuntu Mono", "Courier Prime", monospace, Helvetica, Arial, sans-serif;
+    font-family:  "Noto Sans SC","Blinker", "Ubuntu Mono", "Courier Prime", monospace, Helvetica, Arial, sans-serif;
 
   }
   @media (min-width: 48em) {
     html {
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
   }
   @media (min-width: 58em) {
     html {
-      font-size: 1.05rem;
+      font-size: 1.2rem;
     }
   }
   
@@ -88,6 +88,7 @@
   .sidebar-nav {
     font-family: "Blinker";
     padding-left: 0;
+    padding-bottom: 1rem;
     list-style: none;
   }
   .sidebar-nav-item {

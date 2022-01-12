@@ -110,7 +110,7 @@
   /* Body text */
   p {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
   
   strong {
@@ -158,7 +158,7 @@
   }
   code {
     padding: .25em .5em;
-    font-size: 85%;
+    font-size: 100%;
     color: #b3555e;
     background-color: #f9f9f9;
     border-radius: 3px;
@@ -168,7 +168,7 @@
     margin-top: 0;
     margin-bottom: 1rem;
     padding: 1rem;
-    font-size: .6rem;
+    font-size: .9rem;
     white-space: pre;
     white-space: pre-wrap;
     word-break: break-all;
@@ -322,8 +322,9 @@
   .page-title,
   .post-title {
     margin-top: 0;
-    /* font-family: 'Ubuntu Mono'; */
-    font-size: 2rem;
+    font-family: 'Blinker';
+    font-size: 3rem;
+    padding-bottom: 1.5rem;
     color: #b3555e;
     font-weight: bold;
   }
