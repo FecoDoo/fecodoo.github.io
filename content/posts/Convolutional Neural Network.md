@@ -10,7 +10,7 @@ The mathmatical format of convolution is
 
 - Continuous: $ Conv(x) = \int f(x-\alpha)t(\alpha)d\alpha $
 - Discreate: $ Conv(x)=\sum_{\alpha} f(x-\alpha)t(\alpha) $
-- Matrix: $Conv(x) = (f * t)(x)$, where $*$ represents the convolution process
+- Matrix: $ Conv(x) = (f * t)(x) $, where * represents the convolution process
 
 # 2 Convolution Neural Network
 
