@@ -32,11 +32,11 @@ $$E(e) = p \times -log_n(p) + (1-p) \times -log_n(1-p)$$
 
 ## 3 KL Divergence
 
-KL divergence, also named relative entropy, describes the similarity between two distributions or systems, such as Poisson and Gaussian.
+`KL divergence`, also named relative entropy, describes the similarity between two distributions or systems, such as Poisson and Gaussian.
 
-The KL divergence function can be described as:
+The `KL divergence` function can be described as:
 
-$$$KL(P||Q) = \sum_{1}^{i} p_i \times (-log_n(q_i) - \sum_{1}^{i} p_i \times (-log_n(p_i)$$
+$$KL(P||Q) = \sum_{1}^{i} p_i \times (-log_n(q_i) - \sum_{1}^{i} p_i \times (-log_n(p_i)$$
 
 According to [Gibbs' inequality (吉布斯不等式)](https://en.wikipedia.org/wiki/Gibbs%27_inequality):
 $$\sum_{1}^{i} p_i \times (-log_n(p_i) \lt \sum_{1}^{i} p_i \times (-log_n(q_i)$$

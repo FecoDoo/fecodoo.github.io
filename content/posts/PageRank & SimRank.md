@@ -1,5 +1,5 @@
 ---
-title: "PageRank&SimRank"
+title: "PageRank & SimRank"
 date: 2020-01-13T22:31:23+08:00
 draft: false
 ---
