@@ -1,240 +1,157 @@
-<!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en-us lang=en-us>
-<head>
-<link href=https://gmpg.org/xfn/11 rel=profile>
-<meta charset=utf-8>
-<meta name=robots content="nofollow">
-<meta name=description content="Yao Kai">
-<meta name=aplus-xplug content="NONE">
-<meta name=keyword content="fecodoo,yao kai">
-<meta name=generator content="Hugo 0.92.0">
-<meta name=viewport content="width=device-width,initial-scale=1">
-<title>IPsec Configuration With Strongswan & Iptables &#183; Y. Kai</title>
-<meta name=description content>
-<link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/print.css media=print>
-<link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/poole.css>
-<link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/syntax.css>
-<link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/hyde.css>
-<link rel=preconnect href=https://fonts.googleapis.com>
-<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Blinker:wght@300;400&family=Noto+Sans+SC&display=swap" rel=stylesheet>
-<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}}</script>
-<script type=text/javascript id=MathJax-script async src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js></script>
-<link rel=apple-touch-icon-precomposed sizes=144x144 href=/apple-touch-icon-144-precomposed.png>
-<link rel="shortcut icon" href=/favicon.ico>
-</head>
-<body class=theme-base-08>
-<aside class=sidebar>
-<div class="container sidebar-sticky">
-<div class=sidebar-about>
-<a href=https://blog.fecodoo.ml/><h1>Y. Kai</h1></a>
-<p class=lead>
-无不克则莫知其极，莫知其极，可以有国
-</p>
-</div>
-<nav>
-<ul class=sidebar-nav>
-<li><a href=https://blog.fecodoo.ml/>Home</a> </li>
-<li><a href=https://github.com/fecodoo/> Github </a></li><li><a href=https://t.me/fecodoo> Telegram </a></li>
-</ul>
-</nav>
-<p class=copyright>&copy; 2022. All rights reserved. </p>
-</div>
-</aside>
-<main class="content container">
-<div class=post>
-<div class=post-title>IPsec Configuration With Strongswan & Iptables</div>
-<time datetime=2021-05-27T20:47:19+0800 class=post-date>Thu, May 27, 2021</time>
-<h2 id=network-overview>Network Overview</h2>
-<p>Assume that we have a typical testbed looks like this:</p>
-<p><img src=/images/ipsec/setup.png alt=setup></p>
-<p>The testbed is initially configured so that the clients (IoT devices) in each customer’s network access a local server. Your goal is to relocate the server functionality from the customers’ local networks to a cloud platform, which is represented by the network on the right-hand side. The Router in the above topology represents routing across the Internet between the customer sites and the cloud. We can enable an ipsec tunnel connecting the client sides and server sides by configuring VPN connections and firewall rules on the gateway routers.</p>
-<p>The customer&rsquo;s local network uses the private IP address range 10.1.0.0/16. The client gateways have NATs. The cloud-side gateway, on the other hand, is currently a simple gateway router with no NAT or even firewall configured. The address space 172.16.0.0/12 simulates public, routable IPv4 addresses (even though it really is a private address range). The cloud servers in this case are configured with routable IP addresses. This way, the clients can start communication with the data center, but not the other way around. You may want to change this so that the cloud servers are in a private address space, both for better security and to save on IPv4 addresses.</p>
-<h3 id=router>Router</h3>
-<p>The Router VM simulates the public Internet between the sites. It also provides a connection to the real Internet, which is needed for downloading software. To enable the routing, you need to start at minimum the client or server VM, the corresponding gateway VMs, and the Router VM. Then, connections from the client or server VM will be routed to the real Internet via the Router.</p>
-<h3 id=client-and-server-apps>Client and Server Apps</h3>
-<p>In each customer site, i.e. IoT client network, there is one VM (S) with the IP address 10.1.0.99 that currently acts as the local server. The server app is placed in the VM at <em>/home/vagrant/server-app</em> on the server. It is written in NodeJS. Use <em>vagrant ssh</em> to connect to the server VM, go to the server app directory, and run <code>npm start</code> to start the server. Once it is started, it listens on port 8080 for HTTP requests. Similarly, the client app is placed inside each client VM at <em>/home/vagrant/client-app</em>. When you start the client app, it tries to send requests to the local server once a second. You can edit the configuration file <em>config.json</em> to change the server address, e.g. to send the requests to a cloud server. You may modify client and server app and their configuration as needed for moving the server functionality to the cloud, but one goal is to keep the changes relatively small.</p>
-<hr>
-<h2 id=modification>Modification</h2>
-<h3 id=add-nat-support-for-servers>Add NAT support for servers</h3>
-<p>Firstly we need to enable the NAT on the gateway-s to protect our servers. And since we want client nodes to communicate with cloud servers, we can prune out the those servers within clients' local network. Now the network structure looks like this:</p>
-<p><img src=/images/ipsec/network.jpg alt=network></p>
-<hr>
-<h2 id=how-do-ipsec-and-iptables-work>How do ipsec and iptables work?</h2>
-<p>A typical workflow of iptables is as follows:
-<img src=/images/ipsec/netfilter.png alt=netfilter></p>
-<p>All packages arriving inbound at the router will go through the <code>PREROUTING</code> table first, there the router will check the package&rsquo;s destination inside the header and decide where the package will go next.</p>
-<p>After <code>PREROUTING</code>, the <code>xfrm</code> state check whether the package is a ipsec encapsulation or not. If there&rsquo;s a match, the corresponding package will go up into the decipher process. After being deciphered, the package will return to the <code>PREROUTING</code> for another check.</p>
-<p>Things are pretty much the same when it comes to the <code>POSTROUTING</code> chain, where packages comming out from the <code>POSTROUTING</code> chain will be examined by the <code>xfrm</code> to see if there&rsquo;s a match for ipsec encapsulation.</p>
-<hr>
-<h2 id=iptables-rules-and-strongswan-configuration>iptables rules and strongswan configuration</h2>
-<h3 id=client-gateway>Client Gateway</h3>
-<p>iptables rules</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#!/usr/bin/env bash
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>## NAT traffic going to the internet</span>
-sudo route add default gw 172.16.16.1 
-<span style=color:#75715e># iptables -t nat -A POSTROUTING -o enp0s8 -j MASQUERADE</span>
-
-<span style=color:#75715e># enable clinet-to-internet</span>
-sudo iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j SNAT --to-source 172.16.16.16
-
-<span style=color:#75715e>## Save the iptables rules</span>
-sudo iptables-save &gt; /etc/iptables/rules.v4
-sudo ip6tables-save &gt; /etc/iptables/rules.v6
-</code></pre></div><p>ipsec configuration</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># ipsec configuration</span>
-sudo cat&gt;/etc/ipsec.conf<span style=color:#e6db74>&lt;&lt;EOF
-</span><span style=color:#e6db74>config setup
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>conn %default
-</span><span style=color:#e6db74>	ikelifetime=60m
-</span><span style=color:#e6db74>	keylife=20m
-</span><span style=color:#e6db74>	rekeymargin=3m
-</span><span style=color:#e6db74>	keyingtries=1
-</span><span style=color:#e6db74>	authby=secret
-</span><span style=color:#e6db74>	keyexchange=ikev2
-</span><span style=color:#e6db74>	mobike=no
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>conn cloud-sitea
-</span><span style=color:#e6db74>	left=172.16.16.16
-</span><span style=color:#e6db74>	leftsubnet=172.16.16.16/32
-</span><span style=color:#e6db74>	leftid=@sitea
-</span><span style=color:#e6db74>	right=172.30.30.30
-</span><span style=color:#e6db74>	rightsubnet=172.30.30.30/32
-</span><span style=color:#e6db74>	rightid=@cloud
-</span><span style=color:#e6db74>	auto=add
-</span><span style=color:#e6db74>EOF</span>
-
-sudo cat&gt;/etc/ipsec.secrets<span style=color:#e6db74>&lt;&lt;EOF
-</span><span style=color:#e6db74>@sitea @cloud : PSK 0sv+NkxY9LLZvwj4qCC2o/gGrWDF2d21jL
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>@sitea %any : PSK 0x45a30759df97dc26a15b88ff
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>@cloud : PSK &#34;This is a strong password&#34;  
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>: PSK &#39;this is the password&#39;
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>172.16.16.16 : PSK   &#34;sitea&#34;
-</span><span style=color:#e6db74>EOF</span>
-
-sudo cat&gt;/etc/strongswan.conf<span style=color:#e6db74>&lt;&lt;EOF
-</span><span style=color:#e6db74>charon {
-</span><span style=color:#e6db74>  load = random nonce aes sha1 sha2 curve25519 hmac stroke kernel-netlink socket-default updown
-</span><span style=color:#e6db74>  multiple_authentication = no
-</span><span style=color:#e6db74>}
-</span><span style=color:#e6db74>EOF</span>
-</code></pre></div><h3 id=server-gateway>Server Gateway</h3>
-<p>iptables rules</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#!/usr/bin/env bash
-</span><span style=color:#75715e></span>
-<span style=color:#75715e># NAT Traffic going to the internet</span>
-sudo route add default gw 172.30.30.1
-
-<span style=color:#75715e># outbound</span>
-sudo iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j SNAT --to-source 172.30.30.30
-
-<span style=color:#75715e># DNAT with policy matching with ipsec</span>
-sudo iptables -t nat -A PREROUTING -d 172.30.30.30 --match policy --pol ipsec --dir in -j DNAT --to-destination 10.0.0.2
-
-<span style=color:#75715e># Save the iptables rules</span>
-sudo iptables-save &gt; /etc/iptables/rules.v4
-sudo ip6tables-save &gt; /etc/iptables/rules.v6
-</code></pre></div><p>ipsec configuration</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># ipsec configuration</span>
-sudo cat&gt;/etc/ipsec.conf<span style=color:#e6db74>&lt;&lt;EOF
-</span><span style=color:#e6db74>config setup
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>conn %default
-</span><span style=color:#e6db74>	ikelifetime=60m
-</span><span style=color:#e6db74>	keylife=20m
-</span><span style=color:#e6db74>	rekeymargin=3m
-</span><span style=color:#e6db74>	keyingtries=1
-</span><span style=color:#e6db74>	authby=secret
-</span><span style=color:#e6db74>	keyexchange=ikev2
-</span><span style=color:#e6db74>	mobike=no
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>conn cloud-sitea
-</span><span style=color:#e6db74>	left=172.30.30.30
-</span><span style=color:#e6db74>	leftsubnet=172.30.30.30/32
-</span><span style=color:#e6db74>	leftid=@cloud
-</span><span style=color:#e6db74>	leftfirewall=yes
-</span><span style=color:#e6db74>	right=172.16.16.16
-</span><span style=color:#e6db74>	rightsubnet=172.16.16.16/32
-</span><span style=color:#e6db74>	rightid=@sitea
-</span><span style=color:#e6db74>	auto=add
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>conn cloud-siteb
-</span><span style=color:#e6db74>	left=172.30.30.30
-</span><span style=color:#e6db74>	leftsubnet=172.30.30.30/32
-</span><span style=color:#e6db74>	leftid=@cloud
-</span><span style=color:#e6db74>	leftfirewall=yes
-</span><span style=color:#e6db74>	right=172.17.17.17
-</span><span style=color:#e6db74>	rightsubnet=172.17.17.17/32
-</span><span style=color:#e6db74>	rightid=@siteb
-</span><span style=color:#e6db74>	auto=add
-</span><span style=color:#e6db74>EOF</span>
-
-sudo cat&gt;/etc/ipsec.secrets<span style=color:#e6db74>&lt;&lt;EOF
-</span><span style=color:#e6db74>@sitea @cloud : PSK 0sv+NkxY9LLZvwj4qCC2o/gGrWDF2d21jL
-</span><span style=color:#e6db74>
-</span><span style=color:#e6db74>@siteb @cloud : PSK 0sv+NkxY9LLZvwj4qCC2o/gGrWDF2d21jL
-</span><span style=color:#e6db74>EOF</span>
-
-sudo cat&gt;/etc/strongswan.conf<span style=color:#e6db74>&lt;&lt;EOF
-</span><span style=color:#e6db74>charon {
-</span><span style=color:#e6db74>  load = random nonce aes sha1 sha2 curve25519 hmac stroke kernel-netlink socket-default updown
-</span><span style=color:#e6db74>  multiple_authentication = no
-</span><span style=color:#e6db74>}
-</span><span style=color:#e6db74>EOF</span>
-</code></pre></div><p>One can start the ipsec negotiation by the following commands:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo ipsec restart <span style=color:#f92672>&amp;&amp;</span> sudo ipsec up cloud-sitea <span style=color:#f92672>&amp;&amp;</span> sudo ipsec up cloud-siteb
-</code></pre></div><p>Now the ipsec tunnels have been started, you can use <code>tcpdump</code> to record communications go through the router:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>16:40:53.922026 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x42<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:53.953376 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x43<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:54.145052 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x44<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:54.145082 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x45<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:54.927406 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x46<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:54.944949 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x47<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:54.944969 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x48<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:55.169508 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x49<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-16:40:55.169531 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x4a<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
-</code></pre></div><p>In addition, on the cloud gateway, the ipsec policy can be found with <code>ipsec statusall</code> command.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>vagrant@gateway-s:~$ sudo ipsec statusall
-Status of IKE charon daemon <span style=color:#f92672>(</span>strongSwan 5.6.2, Linux 4.15.0-143-generic, x86_64<span style=color:#f92672>)</span>:
-  uptime: <span style=color:#ae81ff>3</span> minutes, since May <span style=color:#ae81ff>28</span> 09:42:45 <span style=color:#ae81ff>2021</span>
-  malloc: sbrk 1323008, mmap 0, used 291024, free <span style=color:#ae81ff>1031984</span>
-  worker threads: <span style=color:#ae81ff>11</span> of <span style=color:#ae81ff>16</span> idle, 5/0/0/0 working, job queue: 0/0/0/0, scheduled: <span style=color:#ae81ff>6</span>
-  loaded plugins: charon random nonce aes sha1 sha2 curve25519 hmac stroke kernel-netlink socket-default updown
-Listening IP addresses:
-  192.168.120.15
-  172.30.30.30
-  10.0.0.1
-Connections:
- cloud-sitea:  172.30.30.30...172.16.16.16  IKEv2
- cloud-sitea:   local:  <span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span> uses pre-shared key authentication
- cloud-sitea:   remote: <span style=color:#f92672>[</span>sitea<span style=color:#f92672>]</span> uses pre-shared key authentication
- cloud-sitea:   child:  172.30.30.30/32 <span style=color:#f92672>===</span> 172.16.16.16/32 TUNNEL
- cloud-siteb:  172.30.30.30...172.17.17.17  IKEv2
- cloud-siteb:   local:  <span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span> uses pre-shared key authentication
- cloud-siteb:   remote: <span style=color:#f92672>[</span>siteb<span style=color:#f92672>]</span> uses pre-shared key authentication
- cloud-siteb:   child:  172.30.30.30/32 <span style=color:#f92672>===</span> 172.17.17.17/32 TUNNEL
-Security Associations <span style=color:#f92672>(</span><span style=color:#ae81ff>2</span> up, <span style=color:#ae81ff>0</span> connecting<span style=color:#f92672>)</span>:
- cloud-siteb<span style=color:#f92672>[</span>2<span style=color:#f92672>]</span>: ESTABLISHED <span style=color:#ae81ff>3</span> minutes ago, 172.30.30.30<span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span>...172.17.17.17<span style=color:#f92672>[</span>siteb<span style=color:#f92672>]</span>
- cloud-siteb<span style=color:#f92672>[</span>2<span style=color:#f92672>]</span>: IKEv2 SPIs: e6dc37e3e1532b3f_i* 13da6b4b7b02096a_r, pre-shared key reauthentication in <span style=color:#ae81ff>47</span> minutes
- cloud-siteb<span style=color:#f92672>[</span>2<span style=color:#f92672>]</span>: IKE proposal: AES_CBC_128/HMAC_SHA2_256_128/PRF_HMAC_SHA2_256/CURVE_25519
- cloud-siteb<span style=color:#f92672>{</span>2<span style=color:#f92672>}</span>:  INSTALLED, TUNNEL, reqid 2, ESP SPIs: c7172111_i cda09a5d_o
- cloud-siteb<span style=color:#f92672>{</span>2<span style=color:#f92672>}</span>:  AES_CBC_128/HMAC_SHA2_256_128, <span style=color:#ae81ff>0</span> bytes_i, <span style=color:#ae81ff>0</span> bytes_o, rekeying in <span style=color:#ae81ff>10</span> minutes
- cloud-siteb<span style=color:#f92672>{</span>2<span style=color:#f92672>}</span>:   172.30.30.30/32 <span style=color:#f92672>===</span> 172.17.17.17/32
- cloud-sitea<span style=color:#f92672>[</span>1<span style=color:#f92672>]</span>: ESTABLISHED <span style=color:#ae81ff>3</span> minutes ago, 172.30.30.30<span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span>...172.16.16.16<span style=color:#f92672>[</span>sitea<span style=color:#f92672>]</span>
- cloud-sitea<span style=color:#f92672>[</span>1<span style=color:#f92672>]</span>: IKEv2 SPIs: 48fa756acfb358d1_i* 13575783a73ca121_r, pre-shared key reauthentication in <span style=color:#ae81ff>50</span> minutes
- cloud-sitea<span style=color:#f92672>[</span>1<span style=color:#f92672>]</span>: IKE proposal: AES_CBC_128/HMAC_SHA2_256_128/PRF_HMAC_SHA2_256/CURVE_25519
- cloud-sitea<span style=color:#f92672>{</span>1<span style=color:#f92672>}</span>:  INSTALLED, TUNNEL, reqid 1, ESP SPIs: cac16581_i cffec20c_o
- cloud-sitea<span style=color:#f92672>{</span>1<span style=color:#f92672>}</span>:  AES_CBC_128/HMAC_SHA2_256_128, <span style=color:#ae81ff>4741</span> bytes_i <span style=color:#f92672>(</span><span style=color:#ae81ff>55</span> pkts, 205s ago<span style=color:#f92672>)</span>, <span style=color:#ae81ff>6105</span> bytes_o <span style=color:#f92672>(</span><span style=color:#ae81ff>55</span> pkts, 205s ago<span style=color:#f92672>)</span>, rekeying in <span style=color:#ae81ff>11</span> minutes
- cloud-sitea<span style=color:#f92672>{</span>1<span style=color:#f92672>}</span>:   172.30.30.30/32 <span style=color:#f92672>===</span> 172.16.16.16/32
-</code></pre></div><hr>
-<h2 id=ref>Ref.</h2>
-<p><a href=https://www.strongswan.org/testing/testresults/ikev2/net2net-psk/index.html>StongsWan ikev2/net2net-psk</a></p>
-</div>
-</main>
-</body>
-</html>
+<!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en-us lang=en-us><head><link href=https://gmpg.org/xfn/11 rel=profile><meta charset=utf-8><meta name=robots content="nofollow"><meta name=description content="Yao Kai"><meta name=aplus-xplug content="NONE"><meta name=keyword content="fecodoo,yao kai"><meta name=generator content="Hugo 0.101.0"><meta name=viewport content="width=device-width,initial-scale=1"><title>IPsec Configuration With Strongswan & Iptables &#183; Y. Kai</title><meta name=description content><link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/print.css media=print><link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/poole.css><link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/syntax.css><link type=text/css rel=stylesheet href=https://blog.fecodoo.ml/css/hyde.css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Blinker:wght@300;400&family=Noto+Sans+SC&display=swap" rel=stylesheet><script>MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]]},svg:{fontCache:"global"}}</script><script type=text/javascript id=MathJax-script async src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js></script><link rel=apple-touch-icon-precomposed sizes=144x144 href=/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=/favicon.ico></head><body class=theme-base-08><aside class=sidebar><div class="container sidebar-sticky"><div class=sidebar-about><a href=https://blog.fecodoo.ml/><h1>Y. Kai</h1></a><p class=lead>无不克则莫知其极，莫知其极，可以有国</p></div><nav><ul class=sidebar-nav><li><a href=https://blog.fecodoo.ml/>Home</a></li><li><a href=https://github.com/fecodoo/>Github</a></li><li><a href=https://t.me/fecodoo>Telegram</a></li></ul></nav><p class=copyright>&copy; 2022. All rights reserved.</p></div></aside><main class="content container"><div class=post><div class=post-title>IPsec Configuration With Strongswan & Iptables</div><time datetime=2021-05-27T20:47:19+0800 class=post-date>Thu, May 27, 2021</time><h2 id=network-overview>Network Overview</h2><p>Assume that we have a typical testbed looks like this:</p><p><img src=/images/ipsec/setup.png alt=setup></p><p>The testbed is initially configured so that the clients (IoT devices) in each customer’s network access a local server. Your goal is to relocate the server functionality from the customers’ local networks to a cloud platform, which is represented by the network on the right-hand side. The Router in the above topology represents routing across the Internet between the customer sites and the cloud. We can enable an ipsec tunnel connecting the client sides and server sides by configuring VPN connections and firewall rules on the gateway routers.</p><p>The customer&rsquo;s local network uses the private IP address range 10.1.0.0/16. The client gateways have NATs. The cloud-side gateway, on the other hand, is currently a simple gateway router with no NAT or even firewall configured. The address space 172.16.0.0/12 simulates public, routable IPv4 addresses (even though it really is a private address range). The cloud servers in this case are configured with routable IP addresses. This way, the clients can start communication with the data center, but not the other way around. You may want to change this so that the cloud servers are in a private address space, both for better security and to save on IPv4 addresses.</p><h3 id=router>Router</h3><p>The Router VM simulates the public Internet between the sites. It also provides a connection to the real Internet, which is needed for downloading software. To enable the routing, you need to start at minimum the client or server VM, the corresponding gateway VMs, and the Router VM. Then, connections from the client or server VM will be routed to the real Internet via the Router.</p><h3 id=client-and-server-apps>Client and Server Apps</h3><p>In each customer site, i.e. IoT client network, there is one VM (S) with the IP address 10.1.0.99 that currently acts as the local server. The server app is placed in the VM at <em>/home/vagrant/server-app</em> on the server. It is written in NodeJS. Use <em>vagrant ssh</em> to connect to the server VM, go to the server app directory, and run <code>npm start</code> to start the server. Once it is started, it listens on port 8080 for HTTP requests. Similarly, the client app is placed inside each client VM at <em>/home/vagrant/client-app</em>. When you start the client app, it tries to send requests to the local server once a second. You can edit the configuration file <em>config.json</em> to change the server address, e.g. to send the requests to a cloud server. You may modify client and server app and their configuration as needed for moving the server functionality to the cloud, but one goal is to keep the changes relatively small.</p><hr><h2 id=modification>Modification</h2><h3 id=add-nat-support-for-servers>Add NAT support for servers</h3><p>Firstly we need to enable the NAT on the gateway-s to protect our servers. And since we want client nodes to communicate with cloud servers, we can prune out the those servers within clients&rsquo; local network. Now the network structure looks like this:</p><p><img src=/images/ipsec/network.jpg alt=network></p><hr><h2 id=how-do-ipsec-and-iptables-work>How do ipsec and iptables work?</h2><p>A typical workflow of iptables is as follows:
+<img src=/images/ipsec/netfilter.png alt=netfilter></p><p>All packages arriving inbound at the router will go through the <code>PREROUTING</code> table first, there the router will check the package&rsquo;s destination inside the header and decide where the package will go next.</p><p>After <code>PREROUTING</code>, the <code>xfrm</code> state check whether the package is a ipsec encapsulation or not. If there&rsquo;s a match, the corresponding package will go up into the decipher process. After being deciphered, the package will return to the <code>PREROUTING</code> for another check.</p><p>Things are pretty much the same when it comes to the <code>POSTROUTING</code> chain, where packages comming out from the <code>POSTROUTING</code> chain will be examined by the <code>xfrm</code> to see if there&rsquo;s a match for ipsec encapsulation.</p><hr><h2 id=iptables-rules-and-strongswan-configuration>iptables rules and strongswan configuration</h2><h3 id=client-gateway>Client Gateway</h3><p>iptables rules</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/usr/bin/env bash
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## NAT traffic going to the internet</span>
+</span></span><span style=display:flex><span>sudo route add default gw 172.16.16.1 
+</span></span><span style=display:flex><span><span style=color:#75715e># iptables -t nat -A POSTROUTING -o enp0s8 -j MASQUERADE</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># enable clinet-to-internet</span>
+</span></span><span style=display:flex><span>sudo iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j SNAT --to-source 172.16.16.16
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Save the iptables rules</span>
+</span></span><span style=display:flex><span>sudo iptables-save &gt; /etc/iptables/rules.v4
+</span></span><span style=display:flex><span>sudo ip6tables-save &gt; /etc/iptables/rules.v6
+</span></span></code></pre></div><p>ipsec configuration</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># ipsec configuration</span>
+</span></span><span style=display:flex><span>sudo cat&gt;/etc/ipsec.conf<span style=color:#e6db74>&lt;&lt;EOF
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>config setup
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>conn %default
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	ikelifetime=60m
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	keylife=20m
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rekeymargin=3m
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	keyingtries=1
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	authby=secret
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	keyexchange=ikev2
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	mobike=no
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>conn cloud-sitea
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	left=172.16.16.16
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftsubnet=172.16.16.16/32
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftid=@sitea
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	right=172.30.30.30
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rightsubnet=172.30.30.30/32
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rightid=@cloud
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	auto=add
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>EOF</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>sudo cat&gt;/etc/ipsec.secrets<span style=color:#e6db74>&lt;&lt;EOF
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>@sitea @cloud : PSK 0sv+NkxY9LLZvwj4qCC2o/gGrWDF2d21jL
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>@sitea %any : PSK 0x45a30759df97dc26a15b88ff
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>@cloud : PSK &#34;This is a strong password&#34;  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>: PSK &#39;this is the password&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>172.16.16.16 : PSK   &#34;sitea&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>EOF</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>sudo cat&gt;/etc/strongswan.conf<span style=color:#e6db74>&lt;&lt;EOF
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>charon {
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  load = random nonce aes sha1 sha2 curve25519 hmac stroke kernel-netlink socket-default updown
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  multiple_authentication = no
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>EOF</span>
+</span></span></code></pre></div><h3 id=server-gateway>Server Gateway</h3><p>iptables rules</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/usr/bin/env bash
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#75715e># NAT Traffic going to the internet</span>
+</span></span><span style=display:flex><span>sudo route add default gw 172.30.30.1
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># outbound</span>
+</span></span><span style=display:flex><span>sudo iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j SNAT --to-source 172.30.30.30
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># DNAT with policy matching with ipsec</span>
+</span></span><span style=display:flex><span>sudo iptables -t nat -A PREROUTING -d 172.30.30.30 --match policy --pol ipsec --dir in -j DNAT --to-destination 10.0.0.2
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Save the iptables rules</span>
+</span></span><span style=display:flex><span>sudo iptables-save &gt; /etc/iptables/rules.v4
+</span></span><span style=display:flex><span>sudo ip6tables-save &gt; /etc/iptables/rules.v6
+</span></span></code></pre></div><p>ipsec configuration</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># ipsec configuration</span>
+</span></span><span style=display:flex><span>sudo cat&gt;/etc/ipsec.conf<span style=color:#e6db74>&lt;&lt;EOF
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>config setup
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>conn %default
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	ikelifetime=60m
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	keylife=20m
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rekeymargin=3m
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	keyingtries=1
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	authby=secret
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	keyexchange=ikev2
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	mobike=no
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>conn cloud-sitea
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	left=172.30.30.30
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftsubnet=172.30.30.30/32
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftid=@cloud
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftfirewall=yes
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	right=172.16.16.16
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rightsubnet=172.16.16.16/32
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rightid=@sitea
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	auto=add
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>conn cloud-siteb
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	left=172.30.30.30
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftsubnet=172.30.30.30/32
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftid=@cloud
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	leftfirewall=yes
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	right=172.17.17.17
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rightsubnet=172.17.17.17/32
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	rightid=@siteb
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>	auto=add
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>EOF</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>sudo cat&gt;/etc/ipsec.secrets<span style=color:#e6db74>&lt;&lt;EOF
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>@sitea @cloud : PSK 0sv+NkxY9LLZvwj4qCC2o/gGrWDF2d21jL
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>@siteb @cloud : PSK 0sv+NkxY9LLZvwj4qCC2o/gGrWDF2d21jL
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>EOF</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>sudo cat&gt;/etc/strongswan.conf<span style=color:#e6db74>&lt;&lt;EOF
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>charon {
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  load = random nonce aes sha1 sha2 curve25519 hmac stroke kernel-netlink socket-default updown
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>  multiple_authentication = no
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>}
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>EOF</span>
+</span></span></code></pre></div><p>One can start the ipsec negotiation by the following commands:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sudo ipsec restart <span style=color:#f92672>&amp;&amp;</span> sudo ipsec up cloud-sitea <span style=color:#f92672>&amp;&amp;</span> sudo ipsec up cloud-siteb
+</span></span></code></pre></div><p>Now the ipsec tunnels have been started, you can use <code>tcpdump</code> to record communications go through the router:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>16:40:53.922026 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x42<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:53.953376 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x43<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:54.145052 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x44<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:54.145082 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x45<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:54.927406 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x46<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:54.944949 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x47<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:54.944969 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x48<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:55.169508 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x49<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span><span style=display:flex><span>16:40:55.169531 IP 172.16.16.16 &gt; 172.30.30.30: ESP<span style=color:#f92672>(</span>spi<span style=color:#f92672>=</span>0xcb60dec4,seq<span style=color:#f92672>=</span>0x4a<span style=color:#f92672>)</span>, length <span style=color:#ae81ff>104</span>
+</span></span></code></pre></div><p>In addition, on the cloud gateway, the ipsec policy can be found with <code>ipsec statusall</code> command.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>vagrant@gateway-s:~$ sudo ipsec statusall
+</span></span><span style=display:flex><span>Status of IKE charon daemon <span style=color:#f92672>(</span>strongSwan 5.6.2, Linux 4.15.0-143-generic, x86_64<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>  uptime: <span style=color:#ae81ff>3</span> minutes, since May <span style=color:#ae81ff>28</span> 09:42:45 <span style=color:#ae81ff>2021</span>
+</span></span><span style=display:flex><span>  malloc: sbrk 1323008, mmap 0, used 291024, free <span style=color:#ae81ff>1031984</span>
+</span></span><span style=display:flex><span>  worker threads: <span style=color:#ae81ff>11</span> of <span style=color:#ae81ff>16</span> idle, 5/0/0/0 working, job queue: 0/0/0/0, scheduled: <span style=color:#ae81ff>6</span>
+</span></span><span style=display:flex><span>  loaded plugins: charon random nonce aes sha1 sha2 curve25519 hmac stroke kernel-netlink socket-default updown
+</span></span><span style=display:flex><span>Listening IP addresses:
+</span></span><span style=display:flex><span>  192.168.120.15
+</span></span><span style=display:flex><span>  172.30.30.30
+</span></span><span style=display:flex><span>  10.0.0.1
+</span></span><span style=display:flex><span>Connections:
+</span></span><span style=display:flex><span> cloud-sitea:  172.30.30.30...172.16.16.16  IKEv2
+</span></span><span style=display:flex><span> cloud-sitea:   local:  <span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span> uses pre-shared key authentication
+</span></span><span style=display:flex><span> cloud-sitea:   remote: <span style=color:#f92672>[</span>sitea<span style=color:#f92672>]</span> uses pre-shared key authentication
+</span></span><span style=display:flex><span> cloud-sitea:   child:  172.30.30.30/32 <span style=color:#f92672>===</span> 172.16.16.16/32 TUNNEL
+</span></span><span style=display:flex><span> cloud-siteb:  172.30.30.30...172.17.17.17  IKEv2
+</span></span><span style=display:flex><span> cloud-siteb:   local:  <span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span> uses pre-shared key authentication
+</span></span><span style=display:flex><span> cloud-siteb:   remote: <span style=color:#f92672>[</span>siteb<span style=color:#f92672>]</span> uses pre-shared key authentication
+</span></span><span style=display:flex><span> cloud-siteb:   child:  172.30.30.30/32 <span style=color:#f92672>===</span> 172.17.17.17/32 TUNNEL
+</span></span><span style=display:flex><span>Security Associations <span style=color:#f92672>(</span><span style=color:#ae81ff>2</span> up, <span style=color:#ae81ff>0</span> connecting<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span> cloud-siteb<span style=color:#f92672>[</span>2<span style=color:#f92672>]</span>: ESTABLISHED <span style=color:#ae81ff>3</span> minutes ago, 172.30.30.30<span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span>...172.17.17.17<span style=color:#f92672>[</span>siteb<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span> cloud-siteb<span style=color:#f92672>[</span>2<span style=color:#f92672>]</span>: IKEv2 SPIs: e6dc37e3e1532b3f_i* 13da6b4b7b02096a_r, pre-shared key reauthentication in <span style=color:#ae81ff>47</span> minutes
+</span></span><span style=display:flex><span> cloud-siteb<span style=color:#f92672>[</span>2<span style=color:#f92672>]</span>: IKE proposal: AES_CBC_128/HMAC_SHA2_256_128/PRF_HMAC_SHA2_256/CURVE_25519
+</span></span><span style=display:flex><span> cloud-siteb<span style=color:#f92672>{</span>2<span style=color:#f92672>}</span>:  INSTALLED, TUNNEL, reqid 2, ESP SPIs: c7172111_i cda09a5d_o
+</span></span><span style=display:flex><span> cloud-siteb<span style=color:#f92672>{</span>2<span style=color:#f92672>}</span>:  AES_CBC_128/HMAC_SHA2_256_128, <span style=color:#ae81ff>0</span> bytes_i, <span style=color:#ae81ff>0</span> bytes_o, rekeying in <span style=color:#ae81ff>10</span> minutes
+</span></span><span style=display:flex><span> cloud-siteb<span style=color:#f92672>{</span>2<span style=color:#f92672>}</span>:   172.30.30.30/32 <span style=color:#f92672>===</span> 172.17.17.17/32
+</span></span><span style=display:flex><span> cloud-sitea<span style=color:#f92672>[</span>1<span style=color:#f92672>]</span>: ESTABLISHED <span style=color:#ae81ff>3</span> minutes ago, 172.30.30.30<span style=color:#f92672>[</span>cloud<span style=color:#f92672>]</span>...172.16.16.16<span style=color:#f92672>[</span>sitea<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span> cloud-sitea<span style=color:#f92672>[</span>1<span style=color:#f92672>]</span>: IKEv2 SPIs: 48fa756acfb358d1_i* 13575783a73ca121_r, pre-shared key reauthentication in <span style=color:#ae81ff>50</span> minutes
+</span></span><span style=display:flex><span> cloud-sitea<span style=color:#f92672>[</span>1<span style=color:#f92672>]</span>: IKE proposal: AES_CBC_128/HMAC_SHA2_256_128/PRF_HMAC_SHA2_256/CURVE_25519
+</span></span><span style=display:flex><span> cloud-sitea<span style=color:#f92672>{</span>1<span style=color:#f92672>}</span>:  INSTALLED, TUNNEL, reqid 1, ESP SPIs: cac16581_i cffec20c_o
+</span></span><span style=display:flex><span> cloud-sitea<span style=color:#f92672>{</span>1<span style=color:#f92672>}</span>:  AES_CBC_128/HMAC_SHA2_256_128, <span style=color:#ae81ff>4741</span> bytes_i <span style=color:#f92672>(</span><span style=color:#ae81ff>55</span> pkts, 205s ago<span style=color:#f92672>)</span>, <span style=color:#ae81ff>6105</span> bytes_o <span style=color:#f92672>(</span><span style=color:#ae81ff>55</span> pkts, 205s ago<span style=color:#f92672>)</span>, rekeying in <span style=color:#ae81ff>11</span> minutes
+</span></span><span style=display:flex><span> cloud-sitea<span style=color:#f92672>{</span>1<span style=color:#f92672>}</span>:   172.30.30.30/32 <span style=color:#f92672>===</span> 172.16.16.16/32
+</span></span></code></pre></div><hr><h2 id=ref>Ref.</h2><p><a href=https://www.strongswan.org/testing/testresults/ikev2/net2net-psk/index.html>StongsWan ikev2/net2net-psk</a></p></div></main></body></html>
