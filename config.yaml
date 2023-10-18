@@ -1,4 +1,4 @@
-baseURL: https://blog.fecodoo.ml/
+baseURL: https://fecodoo.github.io/
 publishDir: public/
 languageCode: en-us
 title: Y. Kai
@@ -11,8 +11,8 @@ Menus:
       URL: "https://github.com/fecodoo/"
     - Name: "Telegram"
       URL: "https://t.me/fecodoo"
-    # - Name: "LinkedIn"
-    #   URL: "https://www.linkedin.com/in/凯-姚-211242187"
+    - Name: "LinkedIn"
+      URL: "https://www.linkedin.com/in/kai-yao-211242187/"
       
 params:
   # description: "If nothing is impossible, one knows no limits.\tIf one knows no limits, one may rule the empire."
